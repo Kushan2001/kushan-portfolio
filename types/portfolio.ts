@@ -83,8 +83,10 @@ export interface Education {
   readonly institution: string;
   readonly qualification: string;
   readonly fieldOfStudy?: string;
+  readonly department?: string;
+  readonly faculty?: string;
   /** Prefer an ISO 8601 date or year supplied by the portfolio owner. */
-  readonly startDate: string;
+  readonly startDate?: string;
   /** Omit while the qualification is in progress. */
   readonly endDate?: string;
   readonly status: EducationStatus;
