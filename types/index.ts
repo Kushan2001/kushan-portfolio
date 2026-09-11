@@ -1,0 +1,16 @@
+export type {
+  Certification,
+  DevOpsMilestone,
+  Education,
+  EducationStatus,
+  ImageAsset,
+  MilestoneStatus,
+  PortfolioData,
+  Profile,
+  Project,
+  ProjectCategory,
+  ProjectStatus,
+  Skill,
+  SkillCategory,
+  SocialLink,
+} from "./portfolio";
