@@ -62,10 +62,10 @@ export function DevOpsJourney() {
         <div className="relative mt-12">
           <div
             aria-hidden="true"
-            className="timeline-line absolute bottom-5 left-5 top-5 w-px bg-border lg:bottom-auto lg:left-5 lg:right-5 lg:top-5 lg:h-px lg:w-auto"
+            className="timeline-line absolute bottom-5 left-5 top-5 w-px bg-border xl:bottom-auto xl:left-5 xl:right-5 xl:top-5 xl:h-px xl:w-auto"
           />
 
-          <ol className="grid gap-8 lg:grid-cols-3">
+          <ol className="grid gap-8 xl:grid-cols-3">
             {stages.map(({ status, milestones }) => {
               const details = statusDetails[status];
               const StatusIcon = details.icon;
@@ -73,7 +73,7 @@ export function DevOpsJourney() {
               return (
                 <li
                   key={status}
-                  className="timeline-stage relative z-10 flex items-start gap-5 lg:block"
+                  className="timeline-stage relative z-10 flex min-w-0 items-start gap-5 xl:block"
                 >
                   <span
                     aria-hidden="true"
@@ -82,13 +82,14 @@ export function DevOpsJourney() {
                     <StatusIcon className="size-4" />
                   </span>
 
-                  <Card className="min-w-0 flex-1 lg:mt-5">
+                  <Card className="min-w-0 flex-1 xl:mt-5">
                     <CardHeader>
-                      <Badge variant={details.badgeVariant} className="mb-3">
-                        <StatusIcon aria-hidden="true" />
-                        {details.label}
-                      </Badge>
-                      <h3>{details.label}</h3>
+                      <h3>
+                        <Badge variant={details.badgeVariant}>
+                          <StatusIcon aria-hidden="true" />
+                          {details.label}
+                        </Badge>
+                      </h3>
                     </CardHeader>
 
                     <CardContent>

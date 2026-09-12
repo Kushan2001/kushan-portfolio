@@ -14,8 +14,8 @@ export function About() {
   }
 
   return (
-    <Section id="about" surface="muted" aria-labelledby="about-heading">
-      <Container className="grid gap-10 lg:grid-cols-[minmax(0,0.7fr)_minmax(0,1fr)] lg:gap-16">
+    <Section id="about" aria-labelledby="about-heading">
+      <Container>
         <SectionHeading
           eyebrow="About"
           title="About Me"
@@ -23,15 +23,15 @@ export function About() {
           description="My background, current direction, and approach to professional growth."
         />
 
-        <div className="rounded-2xl border border-border bg-card p-6 shadow-card sm:p-8 lg:p-10">
+        <div className="mt-10 grid min-w-0 gap-8 xl:grid-cols-[minmax(0,1fr)_minmax(18rem,0.48fr)] xl:gap-14">
           {paragraphs.length > 0 ? (
-            <div className="space-y-5">
+            <div className="max-w-3xl space-y-5">
               {paragraphs.map((paragraph, index) => (
                 <p
                   key={paragraph}
                   className={
                     index === 0
-                      ? "text-lg font-medium leading-8 text-card-foreground sm:text-xl"
+                      ? "text-lg font-medium leading-8 text-foreground sm:text-xl"
                       : "leading-7 text-muted-foreground"
                   }
                 >
@@ -42,18 +42,22 @@ export function About() {
           ) : null}
 
           {profile.roles.length > 0 ? (
-            <div className="mt-8 border-t border-border pt-6">
-              <p className="mb-4 font-mono text-xs font-semibold uppercase tracking-[0.16em] text-primary">
+            <aside className="self-start rounded-2xl border border-border bg-card p-6 shadow-card sm:p-7">
+              <p className="mb-4 text-xs font-semibold uppercase tracking-[0.1em] text-primary">
                 Career direction
               </p>
-              <ul className="flex flex-wrap gap-2" aria-label="Career direction">
+              <ul className="space-y-3" aria-label="Career direction">
                 {profile.roles.map((role) => (
-                  <li key={role}>
+                  <li key={role} className="flex items-center gap-3">
+                    <span
+                      aria-hidden="true"
+                      className="size-1.5 rounded-full bg-primary"
+                    />
                     <Badge variant="outline">{role}</Badge>
                   </li>
                 ))}
               </ul>
-            </div>
+            </aside>
           ) : null}
         </div>
       </Container>

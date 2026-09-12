@@ -17,8 +17,8 @@ export function ProjectFilters({
   const filters = ["all", ...categories] as const;
 
   return (
-    <nav aria-label="Filter projects by category" className="mt-10">
-      <ul className="flex flex-wrap gap-2">
+    <nav aria-label="Filter projects by category" className="mt-8 min-w-0">
+      <ul className="flex min-w-0 flex-wrap gap-2">
         {filters.map((category) => {
           const isActive = selectedCategory === category;
           const label =
@@ -36,7 +36,7 @@ export function ProjectFilters({
                     variant: isActive ? "default" : "outline",
                     size: "sm",
                   }),
-                  "min-w-16",
+                  "min-h-11 min-w-16",
                 )}
               >
                 {label}

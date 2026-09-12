@@ -10,6 +10,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
       defaultTheme="system"
       enableSystem
       enableColorScheme
+      themes={["light", "dark"]}
       disableTransitionOnChange
       storageKey="portfolio-theme"
     >

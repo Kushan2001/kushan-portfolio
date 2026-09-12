@@ -36,7 +36,7 @@ export function SectionHeading({
       {eyebrow ? (
         <p
           className={cn(
-            "mb-3 text-sm font-semibold tracking-[0.12em] uppercase",
+            "mb-3 text-xs font-semibold tracking-[0.1em] uppercase",
             isInverse ? "text-surface-inverse-muted" : "text-primary",
           )}
         >
@@ -47,7 +47,7 @@ export function SectionHeading({
       {description ? (
         <p
           className={cn(
-            "mt-5 text-base leading-7 sm:text-lg sm:leading-8",
+            "mt-4 max-w-2xl text-base leading-7 sm:text-lg sm:leading-8",
             isInverse
               ? "text-surface-inverse-muted"
               : "text-muted-foreground",

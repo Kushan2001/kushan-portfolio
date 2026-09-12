@@ -19,7 +19,10 @@ import type { SocialLink } from "@/types";
 
 interface MobileNavigationProps {
   items: readonly NavigationItem[];
-  githubLink?: Pick<SocialLink, "ariaLabel" | "label" | "url">;
+  socialLinks: readonly Pick<
+    SocialLink,
+    "ariaLabel" | "label" | "url"
+  >[];
 }
 
 const mobileLinkStyles =
@@ -27,7 +30,7 @@ const mobileLinkStyles =
 
 export function MobileNavigation({
   items,
-  githubLink,
+  socialLinks,
 }: MobileNavigationProps) {
   const [open, setOpen] = useState(false);
   const closeNavigation = () => setOpen(false);
@@ -47,7 +50,7 @@ export function MobileNavigation({
       </SheetTrigger>
       <SheetContent
         side="right"
-        className="w-[min(24rem,calc(100vw-1rem))] gap-0 border-border bg-background"
+        className="w-[min(22rem,calc(100vw-0.75rem))] gap-0 border-border bg-background"
       >
         <SheetHeader className="border-b border-border px-6 py-5">
           <SheetTitle className="text-lg font-semibold">Menu</SheetTitle>
@@ -74,23 +77,31 @@ export function MobileNavigation({
           </nav>
 
           <div className="mt-auto space-y-5 border-t border-border pt-5">
-            {githubLink ? (
-              <a
-                href={githubLink.url}
-                target="_blank"
-                rel="noreferrer"
-                onClick={closeNavigation}
-                className={mobileLinkStyles}
-                aria-label={githubLink.ariaLabel}
-              >
-                <ExternalLink aria-hidden="true" className="mr-2 size-4" />
-                {githubLink.label}
-                <span className="sr-only"> (opens in a new tab)</span>
-              </a>
+            {socialLinks.length > 0 ? (
+              <ul className="space-y-1" aria-label="Social links">
+                {socialLinks.map((socialLink) => (
+                  <li key={socialLink.url}>
+                    <a
+                      href={socialLink.url}
+                      target="_blank"
+                      rel="noreferrer"
+                      onClick={closeNavigation}
+                      className={mobileLinkStyles}
+                      aria-label={`${socialLink.ariaLabel} (opens in a new tab)`}
+                    >
+                      <ExternalLink
+                        aria-hidden="true"
+                        className="mr-2 size-4"
+                      />
+                      {socialLink.label}
+                    </a>
+                  </li>
+                ))}
+              </ul>
             ) : null}
 
-            <div>
-              <p className="mb-2 px-1 text-sm font-medium text-muted-foreground">
+            <div className="flex items-center justify-between gap-4 px-1">
+              <p className="text-sm font-medium text-muted-foreground">
                 Theme
               </p>
               <ThemeToggle />

@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { projectCategoryLabels } from "@/lib/projects";
+import { cn } from "@/lib/utils";
 import type { Project } from "@/types";
 
 interface ProjectCardProps {
@@ -17,19 +18,25 @@ export function ProjectCard({ project }: ProjectCardProps) {
   const summary = project.summary.trim();
 
   return (
-    <article aria-labelledby={`project-${project.slug}-title`} className="h-full">
+    <article
+      aria-labelledby={`project-${project.slug}-title`}
+      className="h-full min-w-0"
+    >
       <Card
         interactive
-        className="h-full gap-0 py-0 transition-[transform,border-color,box-shadow] motion-safe:hover:-translate-y-1"
+        className={cn(
+          "h-full gap-0 py-0 transition-[transform,border-color,box-shadow] motion-safe:hover:-translate-y-0.5",
+          !image && "border-t-2 border-t-primary/55",
+        )}
       >
         {image ? (
-          <div className="aspect-[16/10] overflow-hidden border-b border-border bg-muted">
+          <div className="aspect-video overflow-hidden border-b border-border bg-muted">
             <Image
               src={image.src}
               alt={image.alt}
               width={image.width}
               height={image.height}
-              sizes="(max-width: 639px) calc(100vw - 2rem), (max-width: 1023px) 50vw, 33vw"
+              sizes="(max-width: 767px) calc(100vw - 2rem), (max-width: 1279px) 50vw, 40rem"
               className="h-full w-full object-cover transition-transform duration-300 motion-safe:group-hover/card:scale-[1.02]"
             />
           </div>
@@ -47,7 +54,7 @@ export function ProjectCard({ project }: ProjectCardProps) {
           </h3>
         </CardHeader>
 
-        <CardContent className="flex flex-1 flex-col pb-6">
+        <CardContent className="flex min-w-0 flex-1 flex-col pb-6">
           {summary ? (
             <p className="mt-4 leading-7 text-muted-foreground">{summary}</p>
           ) : null}
@@ -65,14 +72,28 @@ export function ProjectCard({ project }: ProjectCardProps) {
             </ul>
           ) : null}
 
-          <div className="mt-auto flex flex-wrap gap-2 pt-8">
+          <div className="mt-auto flex flex-wrap gap-2 pt-7">
+            <Link
+              href={`/projects/${project.slug}`}
+              className={cn(
+                buttonVariants({ size: "sm" }),
+                "min-h-11",
+              )}
+            >
+              Case Study
+              <ArrowRight aria-hidden="true" />
+            </Link>
+
             {project.githubUrl ? (
               <a
                 href={project.githubUrl}
                 target="_blank"
                 rel="noreferrer"
                 aria-label={`${project.title} on GitHub (opens in a new tab)`}
-                className={buttonVariants({ variant: "outline", size: "sm" })}
+                className={cn(
+                  buttonVariants({ variant: "ghost", size: "sm" }),
+                  "min-h-11",
+                )}
               >
                 GitHub
                 <ExternalLink aria-hidden="true" />
@@ -85,20 +106,16 @@ export function ProjectCard({ project }: ProjectCardProps) {
                 target="_blank"
                 rel="noreferrer"
                 aria-label={`${project.title} live demo (opens in a new tab)`}
-                className={buttonVariants({ variant: "outline", size: "sm" })}
+                className={cn(
+                  buttonVariants({ variant: "outline", size: "sm" }),
+                  "min-h-11",
+                )}
               >
                 Live Demo
                 <ExternalLink aria-hidden="true" />
               </a>
             ) : null}
 
-            <Link
-              href={`/projects/${project.slug}`}
-              className={buttonVariants({ variant: "ghost", size: "sm" })}
-            >
-              Case Study
-              <ArrowRight aria-hidden="true" />
-            </Link>
           </div>
         </CardContent>
       </Card>
