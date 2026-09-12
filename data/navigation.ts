@@ -12,3 +12,10 @@ export const navigationItems: readonly NavigationItem[] = [
   { label: "Education", href: "/#education" },
   { label: "Contact", href: "/#contact" },
 ];
+
+export const primaryNavigationItems: readonly NavigationItem[] = [
+  { label: "Projects", href: "/#projects" },
+  { label: "DevOps", href: "/#devops" },
+  { label: "About", href: "/#about" },
+  { label: "Contact", href: "/#contact" },
+];

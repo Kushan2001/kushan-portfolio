@@ -31,7 +31,7 @@ export function Education() {
 
   return (
     <Section id="education" aria-labelledby="education-heading">
-      <Container className="grid gap-10 lg:grid-cols-[minmax(0,0.55fr)_minmax(0,1fr)] lg:gap-16">
+      <Container className="grid min-w-0 gap-10 xl:grid-cols-[minmax(0,0.55fr)_minmax(0,1fr)] xl:gap-16">
         <SectionHeading
           eyebrow="Education"
           title="Academic Background"
@@ -39,7 +39,7 @@ export function Education() {
           description="Formal study and specialization supporting my direction in technology."
         />
 
-        <ul className="space-y-6">
+        <ul className="min-w-0 space-y-6">
           {education.map((item, index) => {
             const status = educationStatusDetails[item.status];
             const StatusIcon = status.icon;
@@ -50,7 +50,7 @@ export function Education() {
             return (
               <li key={`${item.institution}-${item.qualification}`}>
                 <article aria-labelledby={titleId}>
-                  <Card>
+                  <Card size="sm" className="shadow-none">
                     <CardHeader>
                       <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
                         <span className="flex size-10 items-center justify-center rounded-lg bg-accent text-accent-foreground">
@@ -97,13 +97,13 @@ export function Education() {
                       {item.fieldOfStudy?.trim() ||
                       item.department?.trim() ||
                       item.faculty?.trim() ? (
-                        <dl className="grid gap-5 border-t border-border pt-6 sm:grid-cols-2">
+                        <dl className="grid min-w-0 gap-5 border-t border-border pt-5 sm:grid-cols-2">
                           {item.fieldOfStudy?.trim() ? (
                             <div>
                               <dt className="font-mono text-xs font-semibold uppercase tracking-[0.12em] text-primary">
                                 Specialization
                               </dt>
-                              <dd className="mt-2 text-sm leading-6 text-card-foreground">
+                              <dd className="mt-2 break-words text-sm leading-6 text-card-foreground">
                                 {item.fieldOfStudy}
                               </dd>
                             </div>
@@ -114,7 +114,7 @@ export function Education() {
                               <dt className="font-mono text-xs font-semibold uppercase tracking-[0.12em] text-primary">
                                 Department
                               </dt>
-                              <dd className="mt-2 text-sm leading-6 text-card-foreground">
+                              <dd className="mt-2 break-words text-sm leading-6 text-card-foreground">
                                 {item.department}
                               </dd>
                             </div>
@@ -125,7 +125,7 @@ export function Education() {
                               <dt className="font-mono text-xs font-semibold uppercase tracking-[0.12em] text-primary">
                                 Faculty
                               </dt>
-                              <dd className="mt-2 text-sm leading-6 text-card-foreground">
+                              <dd className="mt-2 break-words text-sm leading-6 text-card-foreground">
                                 {item.faculty}
                               </dd>
                             </div>

@@ -25,7 +25,9 @@ export function Section({
     <section
       className={cn(
         surfaceClasses[surface],
-        compact ? "py-12 sm:py-16" : "py-[var(--section-spacing)]",
+        compact
+          ? "py-12 sm:py-14 lg:py-16"
+          : "py-16 md:py-20 lg:py-24",
         reveal && "section-reveal",
         className,
       )}

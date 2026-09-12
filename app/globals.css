@@ -2,7 +2,7 @@
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
 
-@custom-variant dark (&:is(.dark *));
+@custom-variant dark (&:where(.dark, .dark *));
 
 @theme inline {
   --color-background: var(--background);
@@ -90,9 +90,7 @@
   --chart-4: #8796aa;
   --chart-5: #a7b1c0;
   --radius: 0.75rem;
-  --container-width: 72rem;
-  --page-gutter: clamp(1rem, 4vw, 2rem);
-  --section-spacing: clamp(4.5rem, 9vw, 7.5rem);
+  --container-width: 80rem;
   --elevation-card: 0 1px 2px rgb(15 23 42 / 0.04),
     0 8px 24px rgb(15 23 42 / 0.04);
   --elevation-card-hover: 0 2px 4px rgb(15 23 42 / 0.05),
@@ -161,12 +159,12 @@
   html {
     @apply bg-background font-sans;
     scroll-behavior: smooth;
+    scroll-padding-top: 5rem;
     scrollbar-gutter: stable;
   }
 
   body {
     @apply bg-background text-foreground;
-    min-width: 20rem;
     font-size: 1rem;
     line-height: 1.65;
     text-rendering: optimizeLegibility;
@@ -183,11 +181,11 @@
   }
 
   h1 {
-    font-size: clamp(2.5rem, 6vw, 3.75rem);
+    font-size: clamp(2.5rem, 5vw, 3.75rem);
   }
 
   h2 {
-    font-size: clamp(2rem, 4vw, 2.75rem);
+    font-size: clamp(2rem, 4vw, 2.625rem);
   }
 
   h3 {
@@ -232,13 +230,12 @@
   }
 
   [id] {
-    scroll-margin-top: 6rem;
+    scroll-margin-top: 5rem;
   }
 }
 
 @keyframes hero-enter {
   from {
-    opacity: 0;
     transform: translateY(0.75rem);
   }
 
@@ -250,8 +247,7 @@
 
 @keyframes section-enter {
   from {
-    opacity: 0;
-    transform: translateY(1rem);
+    transform: translateY(0.625rem);
   }
 
   to {
@@ -262,8 +258,7 @@
 
 @keyframes timeline-enter {
   from {
-    opacity: 0;
-    transform: translateY(0.75rem);
+    transform: translateY(0.5rem);
   }
 
   to {
@@ -274,7 +269,7 @@
 
 @keyframes timeline-line-enter {
   from {
-    opacity: 0.25;
+    opacity: 0.55;
   }
 
   to {

@@ -24,7 +24,7 @@ export function Contact() {
       surface="inverse"
       aria-labelledby="contact-heading"
     >
-      <Container className="grid gap-10 lg:grid-cols-[minmax(0,0.7fr)_minmax(0,1fr)] lg:gap-16">
+      <Container className="grid min-w-0 gap-10 xl:grid-cols-[minmax(0,0.7fr)_minmax(0,1fr)] xl:gap-16">
         <SectionHeading
           eyebrow="Contact"
           title="Let’s Connect"
@@ -33,7 +33,7 @@ export function Contact() {
           description="Reach out by email or connect through GitHub and LinkedIn."
         />
 
-        <div className="rounded-2xl border border-surface-inverse-muted/25 p-6 sm:p-8 lg:p-10">
+        <div className="min-w-0 rounded-2xl border border-surface-inverse-muted/25 bg-white/[0.025] p-6 sm:p-8">
           {profile.email ? (
             <div>
               <p className="font-mono text-xs font-semibold uppercase tracking-[0.16em] text-surface-inverse-muted">
@@ -41,15 +41,18 @@ export function Contact() {
               </p>
               <a
                 href={`mailto:${profile.email}`}
-                className="mt-3 inline-block break-all rounded-md text-lg font-semibold text-surface-inverse-foreground underline-offset-4 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-surface-inverse-foreground"
+                className="mt-3 inline-flex min-h-11 max-w-full items-center break-all rounded-md text-sm font-semibold tracking-[-0.01em] text-surface-inverse-foreground underline-offset-4 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-surface-inverse-foreground sm:text-lg"
               >
                 {profile.email}
               </a>
 
-              <div className="mt-7 flex flex-col items-start gap-3 sm:flex-row sm:flex-wrap">
+              <div className="mt-7 flex flex-col items-stretch gap-3 sm:flex-row sm:flex-wrap sm:items-start">
                 <a
                   href={`mailto:${profile.email}`}
-                  className={buttonVariants({ size: "lg" })}
+                  className={buttonVariants({
+                    size: "lg",
+                    className: "w-full sm:w-auto",
+                  })}
                 >
                   <Mail aria-hidden="true" />
                   Contact Me

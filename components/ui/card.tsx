@@ -19,7 +19,7 @@ function Card({
       data-variant={variant}
       data-interactive={interactive || undefined}
       className={cn(
-        "group/card flex flex-col gap-(--card-spacing) overflow-hidden rounded-xl border border-border bg-card py-(--card-spacing) text-card-foreground shadow-card [--card-spacing:--spacing(6)] has-data-[slot=card-footer]:pb-0 has-[>img:first-child]:pt-0 data-[size=sm]:[--card-spacing:--spacing(4)] data-[size=sm]:has-data-[slot=card-footer]:pb-0 data-[variant=subtle]:bg-surface-muted data-[variant=inverse]:border-white/10 data-[variant=inverse]:bg-surface-inverse data-[variant=inverse]:text-surface-inverse-foreground data-[interactive]:transition-[border-color,box-shadow] data-[interactive]:duration-200 data-[interactive]:hover:border-border-strong data-[interactive]:hover:shadow-card-hover *:[img:first-child]:rounded-t-xl *:[img:last-child]:rounded-b-xl",
+        "group/card flex min-w-0 flex-col gap-(--card-spacing) overflow-hidden rounded-2xl border border-border bg-card py-(--card-spacing) text-card-foreground shadow-card [--card-spacing:--spacing(6)] has-data-[slot=card-footer]:pb-0 has-[>img:first-child]:pt-0 data-[size=sm]:[--card-spacing:--spacing(5)] data-[size=sm]:has-data-[slot=card-footer]:pb-0 data-[variant=subtle]:bg-surface-muted data-[variant=inverse]:border-white/10 data-[variant=inverse]:bg-surface-inverse data-[variant=inverse]:text-surface-inverse-foreground data-[interactive]:transition-[border-color,box-shadow] data-[interactive]:duration-200 data-[interactive]:hover:border-border-strong data-[interactive]:hover:shadow-card-hover *:[img:first-child]:rounded-t-2xl *:[img:last-child]:rounded-b-2xl",
         className
       )}
       {...props}

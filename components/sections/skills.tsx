@@ -51,7 +51,11 @@ export function Skills() {
   }
 
   return (
-    <Section id="skills" aria-labelledby="skills-heading">
+    <Section
+      id="skills"
+      surface="muted"
+      aria-labelledby="skills-heading"
+    >
       <Container>
         <SectionHeading
           eyebrow="Skills"
@@ -60,9 +64,9 @@ export function Skills() {
           description="Technologies and tools grouped by area of practice and current learning."
         />
 
-        <ul className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+        <ul className="mt-10 grid gap-5 md:grid-cols-2 xl:grid-cols-3">
           {populatedCategories.map((category) => (
-            <li key={category.id}>
+            <li key={category.id} className="min-w-0">
               <SkillCategoryCard category={category} />
             </li>
           ))}

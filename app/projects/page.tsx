@@ -5,13 +5,18 @@ import { Section } from "@/components/layout/section";
 import { ProjectCard } from "@/components/projects/project-card";
 import { ProjectFilters } from "@/components/projects/project-filters";
 import { projects } from "@/data/projects";
-import { filterableProjectCategories } from "@/lib/projects";
-import type { ProjectCategory } from "@/types";
+import {
+  filterProjectsByCategory,
+  getAvailableProjectCategories,
+  getSelectedProjectCategory,
+} from "@/lib/projects";
+import { createPageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = createPageMetadata({
   title: "Projects",
   description: "Software development and DevOps projects by Kushan M Jayaweera.",
-};
+  path: "/projects",
+});
 
 interface ProjectsPageProps {
   searchParams: Promise<{
@@ -21,21 +26,12 @@ interface ProjectsPageProps {
 
 export default async function ProjectsPage({ searchParams }: ProjectsPageProps) {
   const query = await searchParams;
-  const requestedCategory = Array.isArray(query.category)
-    ? query.category[0]
-    : query.category;
-  const availableCategories = filterableProjectCategories.filter((category) =>
-    projects.some((project) => project.category === category),
+  const availableCategories = getAvailableProjectCategories(projects);
+  const selectedCategory = getSelectedProjectCategory(
+    query.category,
+    availableCategories,
   );
-  const selectedCategory: "all" | ProjectCategory =
-    requestedCategory &&
-    availableCategories.some((category) => category === requestedCategory)
-      ? (requestedCategory as ProjectCategory)
-      : "all";
-  const visibleProjects =
-    selectedCategory === "all"
-      ? projects
-      : projects.filter((project) => project.category === selectedCategory);
+  const visibleProjects = filterProjectsByCategory(projects, selectedCategory);
 
   return (
     <main id="main-content" className="flex-1">
@@ -59,9 +55,9 @@ export default async function ProjectsPage({ searchParams }: ProjectsPageProps) 
               />
 
               {visibleProjects.length > 0 ? (
-                <ul className="mt-8 grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
+                <ul className="mt-8 grid gap-6 md:grid-cols-2">
                   {visibleProjects.map((project) => (
-                    <li key={project.slug}>
+                    <li key={project.slug} className="min-w-0">
                       <ProjectCard project={project} />
                     </li>
                   ))}

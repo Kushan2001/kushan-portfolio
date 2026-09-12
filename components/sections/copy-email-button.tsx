@@ -48,7 +48,7 @@ export function CopyEmailButton({ email }: CopyEmailButtonProps) {
         : "";
 
   return (
-    <div>
+    <div className="w-full sm:w-auto">
       <Button
         type="button"
         variant="outline"
@@ -57,7 +57,7 @@ export function CopyEmailButton({ email }: CopyEmailButtonProps) {
         aria-busy={status === "copying"}
         aria-describedby={statusId}
         onClick={copyEmail}
-        className="border-surface-inverse-muted/50 bg-transparent text-surface-inverse-foreground hover:border-surface-inverse-foreground/40 hover:bg-surface-inverse-foreground/10 hover:text-surface-inverse-foreground"
+        className="w-full border-surface-inverse-muted/50 bg-transparent text-surface-inverse-foreground hover:border-surface-inverse-foreground/40 hover:bg-surface-inverse-foreground/10 hover:text-surface-inverse-foreground sm:w-auto"
       >
         {status === "copied" ? (
           <Check aria-hidden="true" />

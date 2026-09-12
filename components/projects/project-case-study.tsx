@@ -32,7 +32,7 @@ function CaseStudySection({
   return (
     <section
       aria-labelledby={id}
-      className={cn("h-full", wide && "lg:col-span-2")}
+      className={cn("h-full min-w-0", wide && "lg:col-span-2")}
     >
       <Card className="h-full">
         <CardHeader>
@@ -87,13 +87,16 @@ export function ProjectCaseStudy({ project }: ProjectCaseStudyProps) {
         <Container>
           <Link
             href="/projects"
-            className={buttonVariants({ variant: "ghost", size: "sm" })}
+            className={cn(
+              buttonVariants({ variant: "ghost", size: "sm" }),
+              "min-h-11",
+            )}
           >
             <ArrowLeft aria-hidden="true" />
             All Projects
           </Link>
 
-          <header className="mt-8 max-w-4xl">
+          <header className="mt-8 min-w-0 max-w-4xl">
             <div className="mb-5 flex flex-wrap gap-2">
               <Badge variant="secondary">
                 {projectCategoryLabels[project.category]}
@@ -101,7 +104,9 @@ export function ProjectCaseStudy({ project }: ProjectCaseStudyProps) {
               <Badge variant="outline">{projectStatusLabels[project.status]}</Badge>
             </div>
 
-            <h1 id="project-title">{project.title}</h1>
+            <h1 id="project-title" className="break-words">
+              {project.title}
+            </h1>
 
             {project.githubUrl || project.liveUrl ? (
               <div className="mt-8 flex flex-wrap gap-3">
@@ -138,7 +143,7 @@ export function ProjectCaseStudy({ project }: ProjectCaseStudyProps) {
 
       {hasDetails ? (
         <Section aria-label={`${project.title} case study`}>
-          <Container className="grid gap-6 lg:grid-cols-2">
+          <Container className="grid min-w-0 gap-6 lg:grid-cols-2">
             {overview.length > 0 ? (
               <CaseStudySection id="overview" title="Overview" wide>
                 <div className="space-y-4">

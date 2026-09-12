@@ -2,7 +2,14 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
 import { ProjectCaseStudy } from "@/components/projects/project-case-study";
+import { JsonLd } from "@/components/seo/json-ld";
+import { profile } from "@/data/profile";
 import { projects } from "@/data/projects";
+import {
+  createPageMetadata,
+  getAbsoluteUrl,
+  getProjectSeoDescription,
+} from "@/lib/seo";
 
 interface ProjectPageProps {
   params: Promise<{
@@ -30,12 +37,13 @@ export async function generateMetadata({
     notFound();
   }
 
-  const description = project.summary.trim() || project.description.trim();
-
-  return {
+  return createPageMetadata({
     title: project.title,
-    ...(description ? { description } : {}),
-  };
+    description: getProjectSeoDescription(project),
+    path: `/projects/${project.slug}`,
+    type: "article",
+    images: project.images,
+  });
 }
 
 export default async function ProjectPage({ params }: ProjectPageProps) {
@@ -46,9 +54,33 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
     notFound();
   }
 
+  const canonical = getAbsoluteUrl(`/projects/${project.slug}`);
+  const description = getProjectSeoDescription(project);
+  const imageUrls = project.images.flatMap((image) => {
+    const url = getAbsoluteUrl(image.src);
+    return url ? [url] : [];
+  });
+  const projectJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "SoftwareSourceCode",
+    name: project.title,
+    description,
+    keywords: project.technologies,
+    author: {
+      "@type": "Person",
+      name: profile.name,
+    },
+    ...(project.githubUrl ? { codeRepository: project.githubUrl } : {}),
+    ...(imageUrls.length > 0 ? { image: imageUrls } : {}),
+    ...(canonical ? { url: canonical } : {}),
+  };
+
   return (
-    <main id="main-content" className="flex-1">
-      <ProjectCaseStudy project={project} />
-    </main>
+    <>
+      <JsonLd data={projectJsonLd} />
+      <main id="main-content" className="flex-1">
+        <ProjectCaseStudy project={project} />
+      </main>
+    </>
   );
 }
