@@ -33,6 +33,46 @@ test("homepage loads", async ({ page }) => {
   await expect(page.getByRole("main")).toBeVisible();
 });
 
+test("current focus card remains within the viewport at supported widths", async ({
+  page,
+}) => {
+  const viewportWidths = [320, 375, 430, 768, 1024, 1280, 1440, 1920];
+
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.goto("/");
+
+  const card = page.getByRole("complementary", { name: "Current focus" });
+
+  for (const width of viewportWidths) {
+    await page.setViewportSize({ width, height: 1000 });
+    await expect(card).toBeVisible();
+
+    const layout = await page.evaluate(() => {
+      const focusCard = document.querySelector<HTMLElement>(
+        'aside[aria-label="Current focus"]',
+      );
+      const bounds = focusCard?.getBoundingClientRect();
+
+      return {
+        cardLeft: bounds?.left ?? -1,
+        cardRight: bounds?.right ?? -1,
+        cardWidth: bounds?.width ?? 0,
+        documentWidth: document.documentElement.scrollWidth,
+        viewportWidth: document.documentElement.clientWidth,
+      };
+    });
+
+    expect(layout.documentWidth).toBeLessThanOrEqual(layout.viewportWidth);
+    expect(layout.cardLeft).toBeGreaterThanOrEqual(0);
+    expect(layout.cardRight).toBeLessThanOrEqual(layout.viewportWidth + 1);
+
+    if (width >= 1280) {
+      expect(layout.cardWidth).toBeGreaterThanOrEqual(420);
+      expect(layout.cardWidth).toBeLessThanOrEqual(480);
+    }
+  }
+});
+
 test("desktop navbar navigates to homepage sections", async ({ page }) => {
   await page.goto("/");
 

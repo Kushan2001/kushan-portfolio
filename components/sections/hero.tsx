@@ -11,13 +11,42 @@ import { Section } from "@/components/layout/section";
 import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
 import { cvConfig } from "@/data/cv";
+import { devOpsMilestones } from "@/data/devops-milestones";
 import { profile } from "@/data/profile";
+import { projects } from "@/data/projects";
+
+import { CurrentFocusCard } from "./current-focus-card";
 
 const featuredSocialLabels = new Set(["github", "linkedin"]);
 
 export function Hero() {
   const socialLinks = profile.socialLinks.filter((link) =>
     featuredSocialLabels.has(link.label.toLowerCase()),
+  );
+  const projectTechnologies = new Set(
+    projects.flatMap((project) => project.technologies),
+  );
+  const completedMilestoneIds = new Set(
+    devOpsMilestones
+      .filter((milestone) => milestone.status === "completed")
+      .map((milestone) => milestone.id),
+  );
+  const focusTechnologies = [
+    projectTechnologies.has("Java") ? "Java" : null,
+    projectTechnologies.has("MySQL") ? "MySQL" : null,
+    completedMilestoneIds.has("git") ? "Git" : null,
+    completedMilestoneIds.has("linux-fundamentals") ? "Linux" : null,
+    completedMilestoneIds.has("bash-basics") ? "Bash" : null,
+  ].flatMap((technology) => (technology ? [technology] : []));
+  const focusMilestoneIds = new Set([
+    "linux-fundamentals",
+    "git",
+    "bash-basics",
+    "docker",
+    "ci-cd",
+  ]);
+  const focusMilestones = devOpsMilestones.filter((milestone) =>
+    focusMilestoneIds.has(milestone.id),
   );
 
   return (
@@ -27,7 +56,7 @@ export function Hero() {
       reveal={false}
       className="relative border-b border-border xl:flex xl:min-h-[calc(100svh-4rem)] xl:items-center"
     >
-      <Container className="grid min-w-0 items-center gap-12 xl:grid-cols-[minmax(0,1fr)_minmax(18rem,0.38fr)] xl:gap-16 2xl:gap-20">
+      <Container className="grid min-w-0 items-center gap-12 xl:grid-cols-[minmax(0,1fr)_minmax(24rem,29rem)] xl:gap-10 2xl:gap-16">
         <div className="hero-enter min-w-0 max-w-4xl">
           {profile.location ? (
             <Badge variant="outline" className="mb-5 gap-1.5">
@@ -126,31 +155,11 @@ export function Hero() {
           ) : null}
         </div>
 
-        <aside
-          aria-label="Current focus"
-          className="hero-enter hero-enter-delay min-w-0 rounded-2xl border border-border bg-card p-6 shadow-card sm:p-7"
-        >
-          <p className="text-xs font-semibold uppercase tracking-[0.1em] text-primary">
-            Current focus
-          </p>
-
-          <p className="mt-4 text-lg font-semibold leading-7 text-card-foreground">
-            {profile.roles.slice(1).join(" and ")}
-          </p>
-
-          {profile.biography[0]?.trim() ? (
-            <p className="mt-3 text-sm leading-6 text-muted-foreground">
-              {profile.biography[0]}
-            </p>
-          ) : null}
-
-          {profile.location ? (
-            <p className="mt-5 flex items-center gap-2 border-t border-border pt-4 text-sm text-muted-foreground">
-              <MapPin aria-hidden="true" className="size-4 text-primary" />
-              Based in {profile.location}
-            </p>
-          ) : null}
-        </aside>
+        <CurrentFocusCard
+          devOpsMilestones={focusMilestones}
+          location={profile.location}
+          technologies={focusTechnologies}
+        />
       </Container>
     </Section>
   );
