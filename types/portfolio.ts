@@ -73,6 +73,7 @@ export interface Project {
   readonly status: ProjectStatus;
   readonly problem: string;
   readonly solution: string;
+  readonly architecture?: string;
   readonly features: readonly string[];
   readonly challenges: readonly string[];
   readonly lessonsLearned: readonly string[];
