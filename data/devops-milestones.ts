@@ -1,4 +1,77 @@
 import type { DevOpsMilestone } from "@/types";
 
 // Add only milestones confirmed by the portfolio owner.
-export const devOpsMilestones: readonly DevOpsMilestone[] = [];
+export const devOpsMilestones: readonly DevOpsMilestone[] = [
+  {
+    id: "linux-fundamentals",
+    title: "Linux fundamentals",
+    description: "",
+    date: "",
+    status: "completed",
+    technologies: [],
+  },
+  {
+    id: "git",
+    title: "Git",
+    description: "",
+    date: "",
+    status: "completed",
+    technologies: [],
+  },
+  {
+    id: "github",
+    title: "GitHub",
+    description: "",
+    date: "",
+    status: "completed",
+    technologies: [],
+  },
+  {
+    id: "bash-basics",
+    title: "Bash basics",
+    description: "",
+    date: "",
+    status: "completed",
+    technologies: [],
+  },
+  {
+    id: "docker",
+    title: "Docker",
+    description: "",
+    date: "",
+    status: "in-progress",
+    technologies: [],
+  },
+  {
+    id: "ci-cd",
+    title: "CI/CD",
+    description: "",
+    date: "",
+    status: "planned",
+    technologies: [],
+  },
+  {
+    id: "aws",
+    title: "AWS",
+    description: "",
+    date: "",
+    status: "planned",
+    technologies: [],
+  },
+  {
+    id: "terraform",
+    title: "Terraform",
+    description: "",
+    date: "",
+    status: "planned",
+    technologies: [],
+  },
+  {
+    id: "kubernetes",
+    title: "Kubernetes",
+    description: "",
+    date: "",
+    status: "planned",
+    technologies: [],
+  },
+];
