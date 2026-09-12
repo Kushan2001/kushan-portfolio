@@ -5,15 +5,8 @@ import { ArrowRight, ExternalLink } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import type { Project, ProjectCategory } from "@/types";
-
-const categoryLabels: Record<ProjectCategory, string> = {
-  "software-development": "Software",
-  devops: "DevOps",
-  cloud: "Cloud",
-  web: "Web",
-  other: "Other",
-};
+import { projectCategoryLabels } from "@/lib/projects";
+import type { Project } from "@/types";
 
 interface ProjectCardProps {
   project: Project;
@@ -41,7 +34,7 @@ export function ProjectCard({ project }: ProjectCardProps) {
 
         <CardHeader className="pt-6">
           <Badge variant="secondary" className="mb-3">
-            {categoryLabels[project.category]}
+            {projectCategoryLabels[project.category]}
           </Badge>
           <h3
             id={`project-${project.slug}-title`}
