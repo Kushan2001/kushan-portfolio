@@ -18,7 +18,10 @@ export function ProjectCard({ project }: ProjectCardProps) {
 
   return (
     <article aria-labelledby={`project-${project.slug}-title`} className="h-full">
-      <Card interactive className="h-full gap-0 py-0">
+      <Card
+        interactive
+        className="h-full gap-0 py-0 transition-[transform,border-color,box-shadow] motion-safe:hover:-translate-y-1"
+      >
         {image ? (
           <div className="aspect-[16/10] overflow-hidden border-b border-border bg-muted">
             <Image

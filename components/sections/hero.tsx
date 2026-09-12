@@ -24,10 +24,11 @@ export function Hero() {
     <Section
       id="home"
       aria-labelledby="hero-title"
+      reveal={false}
       className="relative flex min-h-[calc(100svh-4.5rem)] items-center overflow-hidden border-b border-border"
     >
       <Container className="grid items-center gap-12 py-10 lg:grid-cols-[minmax(0,1fr)_minmax(18rem,0.42fr)] lg:gap-16">
-        <div className="max-w-4xl">
+        <div className="hero-enter max-w-4xl">
           {profile.location ? (
             <Badge variant="outline" className="mb-6">
               {profile.location}
@@ -111,7 +112,7 @@ export function Hero() {
 
         <aside
           aria-label="Professional focus"
-          className="relative rounded-2xl border border-border bg-card p-6 shadow-card sm:p-8"
+          className="hero-enter hero-enter-delay relative rounded-2xl border border-border bg-card p-6 shadow-card sm:p-8"
         >
           <div
             aria-hidden="true"

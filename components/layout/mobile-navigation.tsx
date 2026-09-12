@@ -23,7 +23,7 @@ interface MobileNavigationProps {
 }
 
 const mobileLinkStyles =
-  "flex min-h-11 items-center rounded-lg px-3 py-2 text-base font-medium text-muted-foreground transition-colors duration-200 hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/40";
+  "flex min-h-11 items-center rounded-lg px-3 py-2 text-base font-medium text-muted-foreground transition-[color,background-color,transform] duration-200 hover:bg-muted hover:text-foreground motion-safe:hover:translate-x-0.5 focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/40";
 
 export function MobileNavigation({
   items,

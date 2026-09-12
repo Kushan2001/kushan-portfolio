@@ -11,12 +11,14 @@ const surfaceClasses = {
 interface SectionProps extends ComponentPropsWithoutRef<"section"> {
   surface?: keyof typeof surfaceClasses;
   compact?: boolean;
+  reveal?: boolean;
 }
 
 export function Section({
   className,
   surface = "default",
   compact = false,
+  reveal = true,
   ...props
 }: SectionProps) {
   return (
@@ -24,6 +26,7 @@ export function Section({
       className={cn(
         surfaceClasses[surface],
         compact ? "py-12 sm:py-16" : "py-[var(--section-spacing)]",
+        reveal && "section-reveal",
         className,
       )}
       {...props}
