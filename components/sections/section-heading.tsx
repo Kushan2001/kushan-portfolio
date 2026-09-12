@@ -6,6 +6,7 @@ interface SectionHeadingProps extends ComponentPropsWithoutRef<"header"> {
   title: string;
   eyebrow?: string;
   description?: string;
+  headingId?: string;
   align?: "start" | "center";
   tone?: "default" | "inverse";
 }
@@ -14,6 +15,7 @@ export function SectionHeading({
   title,
   eyebrow,
   description,
+  headingId,
   align = "start",
   tone = "default",
   className,
@@ -41,7 +43,7 @@ export function SectionHeading({
           {eyebrow}
         </p>
       ) : null}
-      <h2>{title}</h2>
+      <h2 id={headingId}>{title}</h2>
       {description ? (
         <p
           className={cn(
