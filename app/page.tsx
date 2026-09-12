@@ -1,4 +1,6 @@
 import { About } from "@/components/sections/about";
+import { Certifications } from "@/components/sections/certifications";
+import { Contact } from "@/components/sections/contact";
 import { DevOpsJourney } from "@/components/sections/devops-journey";
 import { Education } from "@/components/sections/education";
 import { FeaturedProjects } from "@/components/sections/featured-projects";
@@ -14,6 +16,8 @@ export default function Home() {
       <FeaturedProjects />
       <DevOpsJourney />
       <Education />
+      <Certifications />
+      <Contact />
     </main>
   );
 }
