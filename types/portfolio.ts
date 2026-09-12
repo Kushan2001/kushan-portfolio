@@ -92,6 +92,7 @@ export interface Education {
   readonly endDate?: string;
   readonly status: EducationStatus;
   readonly description?: string;
+  readonly coursework?: readonly string[];
   readonly highlights?: readonly string[];
 }
 
