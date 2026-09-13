@@ -8,9 +8,27 @@ import { cn } from "@/lib/utils";
 import { isTheme } from "@/lib/theme";
 
 const themeOptions = [
-  { value: "system", label: "System", Icon: Monitor },
-  { value: "light", label: "Light", Icon: Sun },
-  { value: "dark", label: "Dark", Icon: Moon },
+  {
+    value: "system",
+    label: "System",
+    Icon: Monitor,
+    iconMotion:
+      "motion-safe:group-hover/theme-option:scale-[1.04] motion-safe:group-focus-within/theme-option:scale-[1.04]",
+  },
+  {
+    value: "light",
+    label: "Light",
+    Icon: Sun,
+    iconMotion:
+      "motion-safe:group-hover/theme-option:rotate-[8deg] motion-safe:group-focus-within/theme-option:rotate-[8deg]",
+  },
+  {
+    value: "dark",
+    label: "Dark",
+    Icon: Moon,
+    iconMotion:
+      "motion-safe:group-hover/theme-option:-rotate-[8deg] motion-safe:group-focus-within/theme-option:-rotate-[8deg]",
+  },
 ] as const;
 
 const subscribeToMount = () => () => undefined;
@@ -28,15 +46,15 @@ export function ThemeToggle({ className }: { className?: string }) {
   return (
     <fieldset
       className={cn(
-        "inline-flex shrink-0 rounded-xl border border-border bg-card p-1 text-card-foreground shadow-card",
+        "inline-flex shrink-0 rounded-xl border border-border/80 bg-card/90 p-1 text-card-foreground shadow-card",
         className,
       )}
     >
       <legend className="sr-only">Color theme</legend>
-      {themeOptions.map(({ value, label, Icon }) => (
+      {themeOptions.map(({ value, label, Icon, iconMotion }) => (
         <label
           key={value}
-          className="relative cursor-pointer rounded-lg has-disabled:cursor-default"
+          className="group/theme-option relative cursor-pointer rounded-lg has-disabled:cursor-default"
           title={`${label} theme`}
         >
           <input
@@ -49,8 +67,12 @@ export function ThemeToggle({ className }: { className?: string }) {
             aria-label={`${label} theme`}
             className="peer sr-only"
           />
-          <span className="flex size-11 items-center justify-center rounded-lg text-muted-foreground transition-colors duration-200 hover:bg-muted hover:text-foreground peer-checked:bg-primary peer-checked:text-primary-foreground peer-checked:shadow-sm peer-focus-visible:ring-3 peer-focus-visible:ring-ring/40 peer-focus-visible:ring-offset-2 peer-focus-visible:ring-offset-background peer-disabled:opacity-70">
-            <Icon aria-hidden="true" className="size-4" strokeWidth={1.8} />
+          <span className="flex size-11 items-center justify-center rounded-lg text-muted-foreground transition-[color,background-color,box-shadow,transform] duration-200 hover:bg-muted/80 hover:text-foreground peer-checked:-translate-y-px peer-checked:bg-primary peer-checked:text-primary-foreground peer-checked:shadow-sm peer-focus-visible:ring-3 peer-focus-visible:ring-ring/40 peer-focus-visible:ring-offset-2 peer-focus-visible:ring-offset-background peer-disabled:opacity-70">
+            <Icon
+              aria-hidden="true"
+              className={cn("size-4 transition-transform duration-200", iconMotion)}
+              strokeWidth={1.8}
+            />
           </span>
         </label>
       ))}
