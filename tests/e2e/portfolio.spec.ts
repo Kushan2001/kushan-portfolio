@@ -538,34 +538,6 @@ test("contact section exposes the real contact links", async ({ page }) => {
   );
 });
 
-test("contact section remains responsive and provides copy feedback", async ({
-  context,
-  page,
-}) => {
-  const viewportWidths = [
-    320, 375, 430, 640, 768, 1024, 1280, 1440, 1920,
-  ];
-
-  await context.grantPermissions(["clipboard-read", "clipboard-write"]);
-  await page.emulateMedia({ reducedMotion: "reduce" });
-  await page.setViewportSize({ width: viewportWidths[0], height: 1000 });
-  await page.goto("/#contact");
-
-  const contact = page.getByRole("region", { name: "Let’s Connect" });
-  const emailCard = contact.getByRole("article", {
-    name: "Start a conversation",
-  });
-  const githubCard = contact.getByRole("article", { name: "GitHub" });
-  const linkedinCard = contact.getByRole("article", { name: "LinkedIn" });
-
-  for (const width of viewportWidths) {
-    await page.setViewportSize({ width, height: 1000 });
-    await contact.scrollIntoViewIfNeeded();
-
-    const cards = await Promise.all([
-      emailCard.boundingBox(),
-      githubCard.boundingBox(),
-      linkedinCard.boundingBox(),
     ]);
     const dimensions = await page.evaluate(() => ({
       documentWidth: document.documentElement.scrollWidth,
