@@ -387,6 +387,78 @@ test("DevOps roadmap remains factual and responsive", async ({ page }) => {
   }
 });
 
+test("Education remains factual and responsive", async ({ page }) => {
+  const viewportWidths = [
+    320, 375, 430, 640, 768, 1024, 1280, 1440, 1920,
+  ];
+
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.setViewportSize({ width: viewportWidths[0], height: 1000 });
+  await page.goto("/");
+
+  const section = page.getByRole("region", { name: "Academic Background" });
+  const summary = section.getByRole("complementary", {
+    name: "Academic summary",
+  });
+  const degree = section.getByRole("article", {
+    name: "Bachelor of Information and Communication Technology (Honours)",
+  });
+  const degreeTitle = degree.getByRole("heading", {
+    level: 3,
+    name: "Bachelor of Information and Communication Technology (Honours)",
+  });
+
+  await expect(degree).toContainText("BICT (Hons)");
+  await expect(degree).toContainText("South Eastern University of Sri Lanka");
+  await expect(degree).toContainText("Software Technology");
+  await expect(degree).toContainText(
+    "Department of Information and Communication Technology",
+  );
+  await expect(degree).toContainText("Faculty of Technology");
+  await expect(degree).toContainText("In Progress");
+  await expect(
+    section.getByRole("list", { name: "Academic highlights" }),
+  ).toBeVisible();
+
+  for (const width of viewportWidths) {
+    await page.setViewportSize({ width, height: 1000 });
+    await section.scrollIntoViewIfNeeded();
+
+    const [summaryBox, degreeBox, titleBox] = await Promise.all([
+      summary.boundingBox(),
+      degree.boundingBox(),
+      degreeTitle.boundingBox(),
+    ]);
+    const dimensions = await page.evaluate(() => ({
+      documentWidth: document.documentElement.scrollWidth,
+      viewportWidth: document.documentElement.clientWidth,
+    }));
+
+    expect(summaryBox).not.toBeNull();
+    expect(degreeBox).not.toBeNull();
+    expect(titleBox).not.toBeNull();
+    expect(dimensions.documentWidth).toBeLessThanOrEqual(
+      dimensions.viewportWidth,
+    );
+
+    for (const bounds of [summaryBox!, degreeBox!, titleBox!]) {
+      expect(bounds.x).toBeGreaterThanOrEqual(0);
+      expect(bounds.x + bounds.width).toBeLessThanOrEqual(
+        dimensions.viewportWidth + 1,
+      );
+    }
+
+    if (width >= 1024) {
+      expect(summaryBox!.x).toBeLessThan(degreeBox!.x);
+      expect(Math.abs(summaryBox!.y - degreeBox!.y)).toBeLessThanOrEqual(2);
+    } else {
+      expect(degreeBox!.y).toBeGreaterThan(
+        summaryBox!.y + summaryBox!.height,
+      );
+    }
+  }
+});
+
 test("project filters update the selected category", async ({ page }) => {
   await page.goto("/projects");
 
