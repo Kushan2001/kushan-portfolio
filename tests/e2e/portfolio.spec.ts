@@ -41,6 +41,7 @@ test("hero remains within the viewport at supported widths", async ({
   ];
 
   await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.setViewportSize({ width: viewportWidths[0], height: 1000 });
   await page.goto("/");
 
   const card = page.getByRole("complementary", { name: "Current focus" });
@@ -307,6 +308,81 @@ test("featured project remains responsive across supported widths", async ({
 
     if (width >= 1024) {
       expect(cardBounds!.width).toBeLessThanOrEqual(768);
+    }
+  }
+});
+
+test("DevOps roadmap remains factual and responsive", async ({ page }) => {
+  const viewportWidths = [
+    320, 375, 430, 640, 768, 1024, 1280, 1440, 1920,
+  ];
+
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.setViewportSize({ width: viewportWidths[0], height: 1000 });
+  await page.goto("/");
+
+  const section = page
+    .getByRole("region", { name: "DevOps Journey" })
+    .filter({
+      has: page.getByRole("list", { name: "DevOps roadmap summary" }),
+    });
+  const completed = section.getByRole("article", {
+    name: "Foundation built",
+  });
+  const learning = section.getByRole("article", { name: "Current focus" });
+  const planned = section.getByRole("article", {
+    name: "Next on the roadmap",
+  });
+  const summary = section.getByRole("list", {
+    name: "DevOps roadmap summary",
+  });
+
+  await expect(summary).toContainText("4 Completed");
+  await expect(summary).toContainText("1 Learning");
+  await expect(summary).toContainText("4 Planned");
+  await expect(completed).toContainText("Linux fundamentals");
+  await expect(completed).toContainText("Git");
+  await expect(completed).toContainText("GitHub");
+  await expect(completed).toContainText("Bash basics");
+  await expect(learning).toContainText("Docker");
+  await expect(planned).toContainText("CI/CD");
+  await expect(planned).toContainText("AWS");
+  await expect(planned).toContainText("Terraform");
+  await expect(planned).toContainText("Kubernetes");
+
+  for (const width of viewportWidths) {
+    await page.setViewportSize({ width, height: 1000 });
+    await section.scrollIntoViewIfNeeded();
+
+    const cards = await Promise.all([
+      completed.boundingBox(),
+      learning.boundingBox(),
+      planned.boundingBox(),
+    ]);
+    const dimensions = await page.evaluate(() => ({
+      documentWidth: document.documentElement.scrollWidth,
+      viewportWidth: document.documentElement.clientWidth,
+    }));
+
+    expect(cards.every(Boolean)).toBe(true);
+    expect(dimensions.documentWidth).toBeLessThanOrEqual(
+      dimensions.viewportWidth,
+    );
+
+    for (const card of cards) {
+      expect(card!.x).toBeGreaterThanOrEqual(0);
+      expect(card!.x + card!.width).toBeLessThanOrEqual(
+        dimensions.viewportWidth + 1,
+      );
+    }
+
+    if (width >= 1280) {
+      expect(Math.max(...cards.map((card) => card!.y))).toBeLessThanOrEqual(
+        Math.min(...cards.map((card) => card!.y)) + 2,
+      );
+    } else {
+      expect(cards[1]!.y).toBeGreaterThan(cards[0]!.y + cards[0]!.height);
+      expect(cards[2]!.y).toBeGreaterThan(cards[1]!.y + cards[1]!.height);
     }
   }
 });
