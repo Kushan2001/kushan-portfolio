@@ -537,3 +537,69 @@ test("contact section exposes the real contact links", async ({ page }) => {
     "http://www.linkedin.com/in/kushan-m-jayaweera-7163562b1",
   );
 });
+
+test("footer exposes profile links and remains responsive", async ({ page }) => {
+  const viewportWidths = [320, 375, 430, 768, 1280, 1920];
+
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.setViewportSize({ width: viewportWidths[0], height: 900 });
+  await page.goto("/");
+
+  const footer = page.getByRole("contentinfo");
+  const footerLinks = footer.getByRole("navigation", {
+    name: "Footer contact links",
+  });
+
+  await expect(footer).toContainText("Kushan M Jayaweera");
+  await expect(footer).toContainText("Software Developer");
+  await expect(footer).toContainText("DevOps Learner");
+  await expect(footer).toContainText("All rights reserved.");
+  await expect(footer).toContainText(
+    "Built with Next.js • TypeScript • Tailwind CSS",
+  );
+  await expect(footerLinks.getByRole("link", { name: "Email" })).toHaveAttribute(
+    "href",
+    "mailto:malidukushan0421@gmail.com",
+  );
+  await expect(
+    footerLinks.getByRole("link", {
+      name: "GitHub profile (opens in a new tab)",
+    }),
+  ).toHaveAttribute("href", "https://github.com/Kushan2001");
+  await expect(
+    footerLinks.getByRole("link", {
+      name: "LinkedIn profile (opens in a new tab)",
+    }),
+  ).toHaveAttribute(
+    "href",
+    "http://www.linkedin.com/in/kushan-m-jayaweera-7163562b1",
+  );
+
+  for (const width of viewportWidths) {
+    await page.setViewportSize({ width, height: 900 });
+    await footer.scrollIntoViewIfNeeded();
+
+    const [footerBounds, linksBounds] = await Promise.all([
+      footer.boundingBox(),
+      footerLinks.boundingBox(),
+    ]);
+    const dimensions = await page.evaluate(() => ({
+      documentWidth: document.documentElement.scrollWidth,
+      viewportWidth: document.documentElement.clientWidth,
+    }));
+
+    expect(footerBounds).not.toBeNull();
+    expect(linksBounds).not.toBeNull();
+    expect(dimensions.documentWidth).toBeLessThanOrEqual(
+      dimensions.viewportWidth,
+    );
+    expect(footerBounds!.x).toBeGreaterThanOrEqual(0);
+    expect(footerBounds!.x + footerBounds!.width).toBeLessThanOrEqual(
+      dimensions.viewportWidth + 1,
+    );
+    expect(linksBounds!.x).toBeGreaterThanOrEqual(0);
+    expect(linksBounds!.x + linksBounds!.width).toBeLessThanOrEqual(
+      dimensions.viewportWidth + 1,
+    );
+  }
+});
