@@ -538,6 +538,7 @@ test("contact section exposes the real contact links", async ({ page }) => {
   );
 });
 
+<<<<<<< HEAD
 test("footer exposes profile links and remains responsive", async ({ page }) => {
   const viewportWidths = [320, 375, 430, 768, 1280, 1920];
 
@@ -582,12 +583,43 @@ test("footer exposes profile links and remains responsive", async ({ page }) => 
     const [footerBounds, linksBounds] = await Promise.all([
       footer.boundingBox(),
       footerLinks.boundingBox(),
+=======
+test("contact section remains responsive and provides copy feedback", async ({
+  context,
+  page,
+}) => {
+  const viewportWidths = [
+    320, 375, 430, 640, 768, 1024, 1280, 1440, 1920,
+  ];
+
+  await context.grantPermissions(["clipboard-read", "clipboard-write"]);
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.setViewportSize({ width: viewportWidths[0], height: 1000 });
+  await page.goto("/#contact");
+
+  const contact = page.getByRole("region", { name: "Let’s Connect" });
+  const emailCard = contact.getByRole("article", {
+    name: "Start a conversation",
+  });
+  const githubCard = contact.getByRole("article", { name: "GitHub" });
+  const linkedinCard = contact.getByRole("article", { name: "LinkedIn" });
+
+  for (const width of viewportWidths) {
+    await page.setViewportSize({ width, height: 1000 });
+    await contact.scrollIntoViewIfNeeded();
+
+    const cards = await Promise.all([
+      emailCard.boundingBox(),
+      githubCard.boundingBox(),
+      linkedinCard.boundingBox(),
+>>>>>>> e2870e8 (style: redesign contact and social profile cards)
     ]);
     const dimensions = await page.evaluate(() => ({
       documentWidth: document.documentElement.scrollWidth,
       viewportWidth: document.documentElement.clientWidth,
     }));
 
+<<<<<<< HEAD
     expect(footerBounds).not.toBeNull();
     expect(linksBounds).not.toBeNull();
     expect(dimensions.documentWidth).toBeLessThanOrEqual(
@@ -602,4 +634,44 @@ test("footer exposes profile links and remains responsive", async ({ page }) => 
       dimensions.viewportWidth + 1,
     );
   }
+=======
+    expect(cards.every(Boolean)).toBe(true);
+    expect(dimensions.documentWidth).toBeLessThanOrEqual(
+      dimensions.viewportWidth,
+    );
+
+    for (const card of cards) {
+      expect(card!.x).toBeGreaterThanOrEqual(0);
+      expect(card!.x + card!.width).toBeLessThanOrEqual(
+        dimensions.viewportWidth + 1,
+      );
+    }
+
+    if (width < 768) {
+      expect(cards[1]!.y).toBeGreaterThan(cards[0]!.y + cards[0]!.height);
+      expect(cards[2]!.y).toBeGreaterThan(cards[1]!.y + cards[1]!.height);
+    } else if (width < 1024) {
+      expect(cards[1]!.y).toBeGreaterThan(cards[0]!.y + cards[0]!.height);
+      expect(Math.abs(cards[1]!.y - cards[2]!.y)).toBeLessThanOrEqual(2);
+    } else {
+      expect(cards[0]!.x).toBeLessThan(cards[1]!.x);
+      expect(cards[2]!.y).toBeGreaterThan(cards[1]!.y + cards[1]!.height);
+    }
+  }
+
+  const copyButton = emailCard.getByRole("button", { name: "Copy Email" });
+  await copyButton.click();
+  await expect(
+    emailCard.getByRole("button", { name: "Copied" }),
+  ).toBeVisible();
+  await expect(emailCard.getByRole("status")).toHaveText(
+    "Email copied to clipboard.",
+  );
+  await expect
+    .poll(() => page.evaluate(() => navigator.clipboard.readText()))
+    .toBe("malidukushan0421@gmail.com");
+  await expect(
+    emailCard.getByRole("button", { name: "Copy Email" }),
+  ).toBeVisible({ timeout: 3000 });
+>>>>>>> e2870e8 (style: redesign contact and social profile cards)
 });

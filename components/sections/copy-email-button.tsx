@@ -20,7 +20,7 @@ export function CopyEmailButton({ email }: CopyEmailButtonProps) {
       return;
     }
 
-    const timeoutId = window.setTimeout(() => setStatus("idle"), 3000);
+    const timeoutId = window.setTimeout(() => setStatus("idle"), 1800);
 
     return () => window.clearTimeout(timeoutId);
   }, [status]);
@@ -57,7 +57,7 @@ export function CopyEmailButton({ email }: CopyEmailButtonProps) {
         aria-busy={status === "copying"}
         aria-describedby={statusId}
         onClick={copyEmail}
-        className="w-full border-surface-inverse-muted/50 bg-transparent text-surface-inverse-foreground hover:border-surface-inverse-foreground/40 hover:bg-surface-inverse-foreground/10 hover:text-surface-inverse-foreground sm:w-auto"
+        className="w-full transition-[background-color,border-color,box-shadow,transform] hover:shadow-card motion-safe:hover:-translate-y-0.5 sm:w-auto"
       >
         {status === "copied" ? (
           <Check aria-hidden="true" />
@@ -67,14 +67,14 @@ export function CopyEmailButton({ email }: CopyEmailButtonProps) {
         {status === "copying"
           ? "Copying…"
           : status === "copied"
-            ? "Email Copied"
+            ? "Copied"
             : "Copy Email"}
       </Button>
       <p
         id={statusId}
         role="status"
         aria-live="polite"
-        className="mt-2 min-h-6 text-sm text-surface-inverse-muted"
+        className="mt-2 min-h-6 text-sm text-muted-foreground"
       >
         {message}
       </p>
