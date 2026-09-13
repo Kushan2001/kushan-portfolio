@@ -6,6 +6,7 @@ import { useState } from "react";
 
 import { ThemeToggle } from "@/components/theme/theme-toggle";
 import { Button } from "@/components/ui/button";
+import { GitHubIcon } from "@/components/ui/github-icon";
 import {
   Sheet,
   SheetContent,
@@ -26,7 +27,7 @@ interface MobileNavigationProps {
 }
 
 const mobileLinkStyles =
-  "flex min-h-11 items-center rounded-lg px-3 py-2 text-base font-medium text-muted-foreground transition-[color,background-color,transform] duration-200 hover:bg-muted hover:text-foreground motion-safe:hover:translate-x-0.5 focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/40";
+  "group/mobile-link flex min-h-11 items-center rounded-lg border border-transparent px-3 py-2 text-base font-medium text-muted-foreground transition-[color,background-color,border-color,transform] duration-200 hover:border-border/80 hover:bg-muted/70 hover:text-foreground motion-safe:hover:translate-x-0.5 focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/40";
 
 export function MobileNavigation({
   items,
@@ -43,6 +44,7 @@ export function MobileNavigation({
             variant="outline"
             size="icon"
             aria-label="Open navigation menu"
+            className="transition-[color,background-color,border-color,transform] motion-safe:hover:-translate-y-px"
           />
         }
       >
@@ -89,11 +91,17 @@ export function MobileNavigation({
                       className={mobileLinkStyles}
                       aria-label={`${socialLink.ariaLabel} (opens in a new tab)`}
                     >
+                      {socialLink.label.toLowerCase() === "github" ? (
+                        <GitHubIcon
+                          aria-hidden="true"
+                          className="mr-2 size-4 transition-transform duration-200 motion-safe:group-hover/mobile-link:-rotate-3 motion-safe:group-focus-visible/mobile-link:-rotate-3"
+                        />
+                      ) : null}
+                      {socialLink.label}
                       <ExternalLink
                         aria-hidden="true"
-                        className="mr-2 size-4"
+                        className="ml-auto size-4 transition-transform duration-200 motion-safe:group-hover/mobile-link:translate-x-0.5 motion-safe:group-hover/mobile-link:-translate-y-0.5 motion-safe:group-focus-visible/mobile-link:translate-x-0.5 motion-safe:group-focus-visible/mobile-link:-translate-y-0.5"
                       />
-                      {socialLink.label}
                     </a>
                   </li>
                 ))}

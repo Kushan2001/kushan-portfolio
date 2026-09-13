@@ -105,8 +105,10 @@ test("desktop navbar navigates to homepage sections", async ({ page }) => {
     name: "Primary navigation",
   });
 
-  await navigation.getByRole("link", { name: "About" }).click();
+  const aboutLink = navigation.getByRole("link", { name: "About" });
+  await aboutLink.click();
   await expect(page).toHaveURL(/\/#about$/);
+  await expect(aboutLink).toHaveAttribute("aria-current", "location");
   await expect(
     page.getByRole("heading", { level: 2, name: "About Me" }),
   ).toBeVisible();
@@ -116,6 +118,45 @@ test("desktop navbar navigates to homepage sections", async ({ page }) => {
   await expect(
     page.getByRole("heading", { level: 2, name: "Featured Projects" }),
   ).toBeVisible();
+});
+
+test("navbar remains responsive across desktop breakpoints", async ({ page }) => {
+  const viewportWidths = [1024, 1280, 1440, 1600, 1920];
+
+  await page.goto("/");
+
+  for (const width of viewportWidths) {
+    await page.setViewportSize({ width, height: 900 });
+
+    const navigation = page.getByRole("navigation", {
+      name: "Primary navigation",
+    });
+    const menuButton = page.getByRole("button", {
+      name: "Open navigation menu",
+    });
+
+    if (width >= 1280) {
+      await expect(navigation).toBeVisible();
+      await expect(
+        page.getByRole("banner").getByRole("link", {
+          name: "GitHub profile (opens in a new tab)",
+        }),
+      ).toBeVisible();
+      await expect(menuButton).toBeHidden();
+    } else {
+      await expect(navigation).toBeHidden();
+      await expect(menuButton).toBeVisible();
+    }
+
+    const dimensions = await page.evaluate(() => ({
+      documentWidth: document.documentElement.scrollWidth,
+      viewportWidth: document.documentElement.clientWidth,
+    }));
+
+    expect(dimensions.documentWidth).toBeLessThanOrEqual(
+      dimensions.viewportWidth,
+    );
+  }
 });
 
 test("mobile navigation opens, navigates, and closes", async ({ page }) => {
@@ -204,6 +245,70 @@ test("projects page displays project data and actions", async ({ page }) => {
     "href",
     "https://github.com/Kushan2001/StudentManagementSystem",
   );
+});
+
+test("featured project remains responsive across supported widths", async ({
+  page,
+}) => {
+  const viewportWidths = [
+    320, 375, 430, 640, 768, 1024, 1280, 1440, 1920,
+  ];
+
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.goto("/");
+
+  const section = page.getByRole("region", { name: "Featured Projects" });
+  const project = section.getByRole("article", {
+    name: "Student Management System",
+  });
+  const viewAll = section.getByRole("link", { name: "View all projects" });
+  const caseStudy = project.getByRole("link", { name: "Case Study" });
+  const github = project.getByRole("link", {
+    name: "Student Management System on GitHub (opens in a new tab)",
+  });
+
+  for (const width of viewportWidths) {
+    await page.setViewportSize({ width, height: 900 });
+    await project.scrollIntoViewIfNeeded();
+
+    await expect(viewAll).toBeVisible();
+    await expect(caseStudy).toBeVisible();
+    await expect(github).toBeVisible();
+
+    const [cardBounds, viewAllBounds, caseStudyBounds, githubBounds] =
+      await Promise.all([
+        project.boundingBox(),
+        viewAll.boundingBox(),
+        caseStudy.boundingBox(),
+        github.boundingBox(),
+      ]);
+    const dimensions = await page.evaluate(() => ({
+      documentWidth: document.documentElement.scrollWidth,
+      viewportWidth: document.documentElement.clientWidth,
+    }));
+
+    expect(cardBounds).not.toBeNull();
+    expect(viewAllBounds).not.toBeNull();
+    expect(caseStudyBounds).not.toBeNull();
+    expect(githubBounds).not.toBeNull();
+    expect(dimensions.documentWidth).toBeLessThanOrEqual(
+      dimensions.viewportWidth,
+    );
+    expect(cardBounds!.x).toBeGreaterThanOrEqual(0);
+    expect(cardBounds!.x + cardBounds!.width).toBeLessThanOrEqual(
+      dimensions.viewportWidth + 1,
+    );
+
+    if (width < 640) {
+      expect(githubBounds!.y).toBeGreaterThanOrEqual(
+        caseStudyBounds!.y + caseStudyBounds!.height,
+      );
+    }
+
+    if (width >= 1024) {
+      expect(cardBounds!.width).toBeLessThanOrEqual(768);
+    }
+  }
 });
 
 test("project filters update the selected category", async ({ page }) => {

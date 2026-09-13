@@ -12,7 +12,7 @@ interface DesktopNavigationProps {
 }
 
 const linkStyles =
-  "relative inline-flex min-h-11 items-center rounded-md px-3 py-2 text-sm font-medium whitespace-nowrap text-muted-foreground transition-colors duration-200 hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/40 after:absolute after:inset-x-3 after:bottom-1 after:h-0.5 after:origin-center after:scale-x-0 after:rounded-full after:bg-primary after:transition-transform data-[active=true]:text-foreground data-[active=true]:after:scale-x-100";
+  "relative inline-flex min-h-11 items-center rounded-md px-3 py-2 text-sm font-medium whitespace-nowrap text-muted-foreground transition-[color,background-color,transform] duration-200 hover:bg-muted/60 hover:text-foreground motion-safe:hover:-translate-y-px focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/40 after:absolute after:inset-x-3 after:bottom-1 after:h-px after:origin-center after:scale-x-0 after:rounded-full after:bg-primary after:transition-transform after:duration-200 after:ease-out hover:after:scale-x-75 data-[active=true]:text-primary data-[active=true]:after:scale-x-100";
 
 export function DesktopNavigation({ items }: DesktopNavigationProps) {
   const pathname = usePathname();
@@ -62,7 +62,7 @@ export function DesktopNavigation({ items }: DesktopNavigationProps) {
 
   return (
     <nav aria-label="Primary navigation">
-      <ul className="flex items-center gap-1">
+      <ul className="flex items-center gap-1.5">
         {items.map((item) => {
           const isActive = activeHref === item.href;
 

@@ -81,19 +81,6 @@ const actionGroupVariants: Variants = {
   visible: { transition: { staggerChildren: 0.07 } },
 };
 
-function splitName(name: string) {
-  const separatorIndex = name.lastIndexOf(" ");
-
-  if (separatorIndex < 0) {
-    return { leading: "", accent: name };
-  }
-
-  return {
-    leading: name.slice(0, separatorIndex),
-    accent: name.slice(separatorIndex + 1),
-  };
-}
-
 export function HeroContent({
   cvAvailable,
   cvPath,
@@ -104,7 +91,6 @@ export function HeroContent({
   socialLinks,
 }: HeroContentProps) {
   const shouldReduceMotion = useReducedMotion();
-  const nameParts = splitName(name);
 
   return (
     <motion.div
@@ -135,26 +121,7 @@ export function HeroContent({
         id="hero-title"
         variants={nameVariants}
       >
-        {nameParts.leading ? <span>{nameParts.leading} </span> : null}
-        <span className="relative inline-block">
-          {nameParts.accent}
-          <motion.span
-            aria-hidden="true"
-            className="absolute -bottom-1 left-0 h-0.5 w-full origin-left rounded-full bg-primary/75"
-            variants={{
-              hidden: { opacity: 0, scaleX: 0 },
-              visible: {
-                opacity: 1,
-                scaleX: 1,
-                transition: {
-                  delay: 0.16,
-                  duration: 0.5,
-                  ease: [0.22, 1, 0.36, 1],
-                },
-              },
-            }}
-          />
-        </span>
+        {name}
       </motion.h1>
 
       <motion.ul
