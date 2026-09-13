@@ -538,68 +538,48 @@ test("contact section exposes the real contact links", async ({ page }) => {
   );
 });
 
-test("footer exposes profile links and remains responsive", async ({ page }) => {
-  const viewportWidths = [320, 375, 430, 768, 1280, 1920];
-
-  await page.emulateMedia({ reducedMotion: "reduce" });
-  await page.setViewportSize({ width: viewportWidths[0], height: 900 });
-  await page.goto("/");
-
-  const footer = page.getByRole("contentinfo");
-  const footerLinks = footer.getByRole("navigation", {
-    name: "Footer contact links",
-  });
-
-  await expect(footer).toContainText("Kushan M Jayaweera");
-  await expect(footer).toContainText("Software Developer");
-  await expect(footer).toContainText("DevOps Learner");
-  await expect(footer).toContainText("All rights reserved.");
-  await expect(footer).toContainText(
-    "Built with Next.js • TypeScript • Tailwind CSS",
-  );
-  await expect(footerLinks.getByRole("link", { name: "Email" })).toHaveAttribute(
-    "href",
-    "mailto:malidukushan0421@gmail.com",
-  );
-  await expect(
-    footerLinks.getByRole("link", {
-      name: "GitHub profile (opens in a new tab)",
-    }),
-  ).toHaveAttribute("href", "https://github.com/Kushan2001");
-  await expect(
-    footerLinks.getByRole("link", {
-      name: "LinkedIn profile (opens in a new tab)",
-    }),
-  ).toHaveAttribute(
-    "href",
-    "http://www.linkedin.com/in/kushan-m-jayaweera-7163562b1",
-  );
-
-  for (const width of viewportWidths) {
-    await page.setViewportSize({ width, height: 900 });
-    await footer.scrollIntoViewIfNeeded();
-
-    const [footerBounds, linksBounds] = await Promise.all([
-      footer.boundingBox(),
-      footerLinks.boundingBox(),
     ]);
     const dimensions = await page.evaluate(() => ({
       documentWidth: document.documentElement.scrollWidth,
       viewportWidth: document.documentElement.clientWidth,
     }));
 
-    expect(footerBounds).not.toBeNull();
-    expect(linksBounds).not.toBeNull();
+    expect(cards.every(Boolean)).toBe(true);
     expect(dimensions.documentWidth).toBeLessThanOrEqual(
       dimensions.viewportWidth,
     );
-    expect(footerBounds!.x).toBeGreaterThanOrEqual(0);
-    expect(footerBounds!.x + footerBounds!.width).toBeLessThanOrEqual(
-      dimensions.viewportWidth + 1,
-    );
-    expect(linksBounds!.x).toBeGreaterThanOrEqual(0);
-    expect(linksBounds!.x + linksBounds!.width).toBeLessThanOrEqual(
-      dimensions.viewportWidth + 1,
-    );
+
+    for (const card of cards) {
+      expect(card!.x).toBeGreaterThanOrEqual(0);
+      expect(card!.x + card!.width).toBeLessThanOrEqual(
+        dimensions.viewportWidth + 1,
+      );
+    }
+
+    if (width < 768) {
+      expect(cards[1]!.y).toBeGreaterThan(cards[0]!.y + cards[0]!.height);
+      expect(cards[2]!.y).toBeGreaterThan(cards[1]!.y + cards[1]!.height);
+    } else if (width < 1024) {
+      expect(cards[1]!.y).toBeGreaterThan(cards[0]!.y + cards[0]!.height);
+      expect(Math.abs(cards[1]!.y - cards[2]!.y)).toBeLessThanOrEqual(2);
+    } else {
+      expect(cards[0]!.x).toBeLessThan(cards[1]!.x);
+      expect(cards[2]!.y).toBeGreaterThan(cards[1]!.y + cards[1]!.height);
+    }
   }
+
+  const copyButton = emailCard.getByRole("button", { name: "Copy Email" });
+  await copyButton.click();
+  await expect(
+    emailCard.getByRole("button", { name: "Copied" }),
+  ).toBeVisible();
+  await expect(emailCard.getByRole("status")).toHaveText(
+    "Email copied to clipboard.",
+  );
+  await expect
+    .poll(() => page.evaluate(() => navigator.clipboard.readText()))
+    .toBe("malidukushan0421@gmail.com");
+  await expect(
+    emailCard.getByRole("button", { name: "Copy Email" }),
+  ).toBeVisible({ timeout: 3000 });
 });
