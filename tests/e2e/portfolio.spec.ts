@@ -33,31 +33,52 @@ test("homepage loads", async ({ page }) => {
   await expect(page.getByRole("main")).toBeVisible();
 });
 
-test("current focus card remains within the viewport at supported widths", async ({
+test("hero remains within the viewport at supported widths", async ({
   page,
 }) => {
-  const viewportWidths = [320, 375, 430, 768, 1024, 1280, 1440, 1920];
+  const viewportWidths = [
+    320, 375, 430, 640, 768, 1024, 1280, 1440, 1920,
+  ];
 
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.goto("/");
 
   const card = page.getByRole("complementary", { name: "Current focus" });
+  const hero = page.getByRole("region", { name: "Kushan M Jayaweera" });
+  const name = page.getByRole("heading", {
+    level: 1,
+    name: "Kushan M Jayaweera",
+  });
 
   for (const width of viewportWidths) {
     await page.setViewportSize({ width, height: 1000 });
     await expect(card).toBeVisible();
+    await expect(name).toBeVisible();
+    await expect(
+      hero.getByRole("link", { name: "View Projects" }),
+    ).toBeVisible();
+    await expect(hero.getByRole("link", { name: "Contact Me" })).toBeVisible();
 
     const layout = await page.evaluate(() => {
       const focusCard = document.querySelector<HTMLElement>(
         'aside[aria-label="Current focus"]',
       );
       const bounds = focusCard?.getBoundingClientRect();
+      const nameBounds = document
+        .querySelector<HTMLElement>("#hero-title")
+        ?.getBoundingClientRect();
 
       return {
         cardLeft: bounds?.left ?? -1,
         cardRight: bounds?.right ?? -1,
         cardWidth: bounds?.width ?? 0,
+        cardOpacity: focusCard ? getComputedStyle(focusCard).opacity : "0",
+        cardTransform: focusCard
+          ? getComputedStyle(focusCard).transform
+          : "none",
         documentWidth: document.documentElement.scrollWidth,
+        nameLeft: nameBounds?.left ?? -1,
+        nameRight: nameBounds?.right ?? -1,
         viewportWidth: document.documentElement.clientWidth,
       };
     });
@@ -65,6 +86,10 @@ test("current focus card remains within the viewport at supported widths", async
     expect(layout.documentWidth).toBeLessThanOrEqual(layout.viewportWidth);
     expect(layout.cardLeft).toBeGreaterThanOrEqual(0);
     expect(layout.cardRight).toBeLessThanOrEqual(layout.viewportWidth + 1);
+    expect(layout.cardOpacity).toBe("1");
+    expect(layout.cardTransform).toBe("none");
+    expect(layout.nameLeft).toBeGreaterThanOrEqual(0);
+    expect(layout.nameRight).toBeLessThanOrEqual(layout.viewportWidth + 1);
 
     if (width >= 1280) {
       expect(layout.cardWidth).toBeGreaterThanOrEqual(420);

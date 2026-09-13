@@ -19,6 +19,7 @@ interface CurrentFocusCardProps {
 
 const cardVariants: Variants = {
   hidden: { opacity: 0, scale: 0.97, y: 20 },
+  reduced: { opacity: 1, scale: 1, y: 0 },
   visible: {
     opacity: 1,
     scale: 1,
@@ -39,6 +40,7 @@ const cardVariants: Variants = {
 
 const itemVariants: Variants = {
   hidden: { opacity: 0, y: 8 },
+  reduced: { opacity: 1, y: 0 },
   visible: {
     opacity: 1,
     y: 0,
@@ -93,9 +95,9 @@ export function CurrentFocusCard({
   return (
     <motion.aside
       aria-label="Current focus"
-      animate={shouldReduceMotion ? undefined : "visible"}
+      animate={shouldReduceMotion ? "reduced" : "visible"}
       className="group relative isolate flex min-w-0 w-full flex-col overflow-hidden rounded-3xl border border-border-strong bg-card p-6 shadow-card transition-[border-color,box-shadow] duration-300 hover:border-primary/35 hover:shadow-card-hover sm:p-8 xl:min-h-[26rem] xl:max-w-[29rem] xl:justify-self-end xl:p-9"
-      initial={shouldReduceMotion ? false : "hidden"}
+      initial={shouldReduceMotion ? "reduced" : "hidden"}
       variants={cardVariants}
       whileHover={shouldReduceMotion ? undefined : "hover"}
     >
