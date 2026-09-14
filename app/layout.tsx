@@ -6,7 +6,12 @@ import { Navbar } from "@/components/layout/navbar";
 import { ThemeProvider } from "@/components/theme/theme-provider";
 import { profile } from "@/data/profile";
 import { siteConfig } from "@/data/site";
-import { getAbsoluteUrl, siteDescription, siteTitle } from "@/lib/seo";
+import {
+  getAbsoluteImageMetadata,
+  getAbsoluteUrl,
+  siteDescription,
+  siteTitle,
+} from "@/lib/seo";
 
 import "./globals.css";
 
@@ -20,6 +25,11 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+const homeUrl = getAbsoluteUrl("/");
+const socialImages = profile.image
+  ? getAbsoluteImageMetadata([profile.image])
+  : [];
+
 export const metadata: Metadata = {
   ...(siteConfig.url ? { metadataBase: new URL(siteConfig.url) } : {}),
   title: {
@@ -31,26 +41,28 @@ export const metadata: Metadata = {
   authors: [
     {
       name: profile.name,
-      ...(getAbsoluteUrl("/") ? { url: getAbsoluteUrl("/") } : {}),
+      ...(homeUrl ? { url: homeUrl } : {}),
     },
   ],
   creator: profile.name,
   publisher: profile.name,
-  ...(getAbsoluteUrl("/")
-    ? { alternates: { canonical: getAbsoluteUrl("/") } }
-    : {}),
+  ...(homeUrl ? { alternates: { canonical: homeUrl } } : {}),
   openGraph: {
     type: "website",
     title: siteTitle,
     description: siteDescription,
     siteName: profile.name,
     locale: siteConfig.locale,
-    ...(getAbsoluteUrl("/") ? { url: getAbsoluteUrl("/") } : {}),
+    ...(homeUrl ? { url: homeUrl } : {}),
+    ...(socialImages.length > 0 ? { images: socialImages } : {}),
   },
   twitter: {
     card: "summary",
     title: siteTitle,
     description: siteDescription,
+    ...(socialImages.length > 0
+      ? { images: socialImages.map((image) => image.url) }
+      : {}),
   },
   robots: {
     index: true,
@@ -68,7 +80,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
-      lang="en"
+      lang={siteConfig.language}
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
       suppressHydrationWarning
     >

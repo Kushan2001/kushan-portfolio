@@ -59,7 +59,7 @@ export default async function ProjectsPage({ searchParams }: ProjectsPageProps) 
                 <ul className="mt-8 grid gap-6 md:grid-cols-2">
                   {visibleProjects.map((project) => (
                     <li key={project.slug} className="min-w-0">
-                      <ProjectCard project={project} />
+                      <ProjectCard project={project} headingLevel={2} />
                     </li>
                   ))}
                 </ul>
