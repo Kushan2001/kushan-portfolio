@@ -538,6 +538,34 @@ test("contact section exposes the real contact links", async ({ page }) => {
   );
 });
 
+test("contact section remains responsive and provides copy feedback", async ({
+  context,
+  page,
+}) => {
+  const viewportWidths = [
+    320, 375, 430, 640, 768, 1024, 1280, 1440, 1920,
+  ];
+
+  await context.grantPermissions(["clipboard-read", "clipboard-write"]);
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.setViewportSize({ width: viewportWidths[0], height: 1000 });
+  await page.goto("/#contact");
+
+  const contact = page.getByRole("region", { name: "Let’s Connect" });
+  const emailCard = contact.getByRole("article", {
+    name: "Start a conversation",
+  });
+  const githubCard = contact.getByRole("article", { name: "GitHub" });
+  const linkedinCard = contact.getByRole("article", { name: "LinkedIn" });
+
+  for (const width of viewportWidths) {
+    await page.setViewportSize({ width, height: 1000 });
+    await contact.scrollIntoViewIfNeeded();
+
+    const cards = await Promise.all([
+      emailCard.boundingBox(),
+      githubCard.boundingBox(),
+      linkedinCard.boundingBox(),
     ]);
     const dimensions = await page.evaluate(() => ({
       documentWidth: document.documentElement.scrollWidth,
@@ -582,4 +610,57 @@ test("contact section exposes the real contact links", async ({ page }) => {
   await expect(
     emailCard.getByRole("button", { name: "Copy Email" }),
   ).toBeVisible({ timeout: 3000 });
+});
+
+test("footer exposes centralized profile data", async ({ page }) => {
+  await page.goto("/");
+
+  const footer = page.getByRole("contentinfo");
+  const footerLinks = footer.getByRole("navigation", {
+    name: "Footer contact links",
+  });
+
+  await expect(footer).toContainText("Kushan M Jayaweera");
+  await expect(footer).toContainText("Software Developer");
+  await expect(footer).toContainText("DevOps Learner");
+  await expect(footer).toContainText("All rights reserved.");
+  await expect(footerLinks.getByRole("link", { name: "Email" })).toHaveAttribute(
+    "href",
+    "mailto:malidukushan0421@gmail.com",
+  );
+  await expect(
+    footerLinks.getByRole("link", {
+      name: "GitHub profile (opens in a new tab)",
+    }),
+  ).toHaveAttribute("href", "https://github.com/Kushan2001");
+  await expect(
+    footerLinks.getByRole("link", {
+      name: "LinkedIn profile (opens in a new tab)",
+    }),
+  ).toHaveAttribute(
+    "href",
+    "http://www.linkedin.com/in/kushan-m-jayaweera-7163562b1",
+  );
+});
+
+test("empty factual sections are neither rendered nor linked", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 375, height: 812 });
+  await page.goto("/");
+
+  await expect(page.locator("#skills")).toHaveCount(0);
+  await expect(page.locator("#certifications")).toHaveCount(0);
+
+  await page.getByRole("button", { name: "Open navigation menu" }).click();
+
+  const mobileNavigation = page.getByRole("navigation", {
+    name: "Mobile navigation",
+  });
+  await expect(
+    mobileNavigation.getByRole("link", { name: "Skills" }),
+  ).toHaveCount(0);
+  await expect(
+    mobileNavigation.getByRole("link", { name: "Certifications" }),
+  ).toHaveCount(0);
 });
