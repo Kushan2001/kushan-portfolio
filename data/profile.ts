@@ -12,6 +12,12 @@ export const profile: Profile = {
   roles: ["ICT Undergraduate", "Software Developer", "DevOps Learner"],
   location: "Sri Lanka",
   email: "malidukushan0421@gmail.com",
+  image: {
+    src: "/images/profile/kushan-profile.png",
+    alt: "Portrait of Kushan M Jayaweera",
+    width: 1254,
+    height: 1254,
+  },
   socialLinks: [
     {
       label: "GitHub",

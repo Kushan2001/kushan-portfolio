@@ -4,6 +4,7 @@ import { Container } from "@/components/layout/container";
 import { Section } from "@/components/layout/section";
 import { ProjectCard } from "@/components/projects/project-card";
 import { ProjectFilters } from "@/components/projects/project-filters";
+import { profile } from "@/data/profile";
 import { projects } from "@/data/projects";
 import {
   filterProjectsByCategory,
@@ -14,7 +15,7 @@ import { createPageMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = createPageMetadata({
   title: "Projects",
-  description: "Software development and DevOps projects by Kushan M Jayaweera.",
+  description: `Software development and DevOps projects by ${profile.name}.`,
   path: "/projects",
 });
 

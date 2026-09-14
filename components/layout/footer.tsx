@@ -9,7 +9,6 @@ import { profile } from "@/data/profile";
 
 type FooterIcon = ComponentType<ComponentPropsWithoutRef<"svg">>;
 
-const footerIdentityRoles = new Set(["Software Developer", "DevOps Learner"]);
 const footerSocialLabels = new Set(["github", "linkedin"]);
 
 const socialIcons: Record<string, FooterIcon> = {
@@ -22,9 +21,7 @@ const footerLinkStyles =
 
 export function Footer() {
   const currentYear = new Date().getFullYear();
-  const identityRoles = profile.roles.filter((role) =>
-    footerIdentityRoles.has(role),
-  );
+  const identityRoles = profile.roles.slice(1);
   const socialLinks = profile.socialLinks.filter((link) =>
     footerSocialLabels.has(link.label.toLowerCase()),
   );

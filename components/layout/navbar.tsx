@@ -12,14 +12,21 @@ import {
   primaryNavigationItems,
 } from "@/data/navigation";
 import { profile } from "@/data/profile";
+import { skillCategories } from "@/data/skills";
 
 export function Navbar() {
   const githubLink = profile.socialLinks.find(
     (link) => link.label.toLowerCase() === "github",
   );
+  const hasSkills = skillCategories.some(
+    (category) => category.skills.length > 0,
+  );
+  const visibleNavigationItems = navigationItems.filter(
+    (item) => item.label !== "Skills" || hasSkills,
+  );
   const mobileItems =
     certifications.length > 0
-      ? navigationItems.flatMap((item) =>
+      ? visibleNavigationItems.flatMap((item) =>
           item.label === "Contact"
             ? [
                 { label: "Certifications", href: "/#certifications" },
@@ -27,7 +34,7 @@ export function Navbar() {
               ]
             : [item],
         )
-      : navigationItems;
+      : visibleNavigationItems;
 
   return (
     <header className="sticky top-0 z-40 border-b border-border/70 bg-background/95 supports-backdrop-filter:bg-background/88 supports-backdrop-filter:backdrop-blur-md">

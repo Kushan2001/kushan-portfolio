@@ -21,8 +21,6 @@ import { education } from "@/data/education";
 import { profile } from "@/data/profile";
 import { cn } from "@/lib/utils";
 
-const profileImagePath = "/images/profile/kushan-profile.png";
-
 interface AboutInfoCardProps {
   children: ReactNode;
   icon: LucideIcon;
@@ -65,14 +63,12 @@ export function About() {
   const currentDirection = profile.biography[1]?.trim() ?? "";
   const currentDirectionLower = currentDirection.toLowerCase();
   const educationEntry = education[0];
-  const hasProfileImage = existsSync(
-    join(
-      process.cwd(),
-      "public",
-      "images",
-      "profile",
-      "kushan-profile.png",
-    ),
+  const profileImage = profile.image;
+  const hasProfileImage = Boolean(
+    profileImage &&
+      existsSync(
+        join(process.cwd(), "public", profileImage.src.replace(/^\/+/, "")),
+      ),
   );
   const developmentFocus = [
     currentDirectionLower.includes("software engineering")
@@ -148,15 +144,15 @@ export function About() {
               : "lg:grid-cols-[minmax(0,1.05fr)_minmax(20rem,0.75fr)] lg:items-start xl:gap-10",
           )}
         >
-          {hasProfileImage ? (
+          {hasProfileImage && profileImage ? (
             <figure className="self-start overflow-hidden rounded-2xl border border-primary/20 bg-card p-2 shadow-card transition-[transform,border-color,box-shadow] duration-300 hover:border-primary/35 hover:shadow-card-hover motion-safe:hover:scale-[1.015]">
               <div className="relative aspect-[4/5] overflow-hidden rounded-xl bg-muted">
                 <Image
-                  alt={`Portrait of ${profile.name}`}
+                  alt={profileImage.alt}
                   className="object-cover transition-[filter,transform] duration-300 hover:brightness-105 motion-safe:hover:scale-[1.015]"
                   fill
                   sizes="(max-width: 767px) calc(100vw - 3rem), (max-width: 1279px) 45vw, 15rem"
-                  src={profileImagePath}
+                  src={profileImage.src}
                 />
               </div>
               <figcaption className="px-2 pb-2 pt-4">
