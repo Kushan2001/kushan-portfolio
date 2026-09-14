@@ -1,7 +1,8 @@
 import type { MetadataRoute } from "next";
 
-import { siteConfig } from "@/data/site";
+import { profile } from "@/data/profile";
 import { projects } from "@/data/projects";
+import { siteConfig } from "@/data/site";
 import { getAbsoluteUrl } from "@/lib/seo";
 
 export default function sitemap(): MetadataRoute.Sitemap {
@@ -9,7 +10,24 @@ export default function sitemap(): MetadataRoute.Sitemap {
     return [];
   }
 
-  return ["/", "/projects", ...projects.map((project) => `/projects/${project.slug}`)].map(
-    (path) => ({ url: getAbsoluteUrl(path) as string }),
-  );
+  const homeUrl = getAbsoluteUrl("/") as string;
+  const projectsUrl = getAbsoluteUrl("/projects") as string;
+  const profileImageUrl = profile.image
+    ? getAbsoluteUrl(profile.image.src)
+    : undefined;
+
+  return [
+    {
+      url: homeUrl,
+      ...(profileImageUrl ? { images: [profileImageUrl] } : {}),
+    },
+    { url: projectsUrl },
+    ...projects.map((project) => ({
+      url: getAbsoluteUrl(`/projects/${project.slug}`) as string,
+      images: project.images.flatMap((image) => {
+        const imageUrl = getAbsoluteUrl(image.src);
+        return imageUrl ? [imageUrl] : [];
+      }),
+    })),
+  ];
 }

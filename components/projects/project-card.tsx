@@ -12,11 +12,16 @@ import type { Project } from "@/types";
 
 interface ProjectCardProps {
   project: Project;
+  headingLevel?: 2 | 3;
 }
 
-export function ProjectCard({ project }: ProjectCardProps) {
+export function ProjectCard({
+  project,
+  headingLevel = 3,
+}: ProjectCardProps) {
   const image = project.images[0];
   const summary = project.summary.trim();
+  const Heading = headingLevel === 2 ? "h2" : "h3";
 
   return (
     <article
@@ -59,12 +64,12 @@ export function ProjectCard({ project }: ProjectCardProps) {
             <Code2 aria-hidden="true" strokeWidth={1.8} />
             {projectCategoryLabels[project.category]}
           </Badge>
-          <h3
+          <Heading
             id={`project-${project.slug}-title`}
             className="font-heading text-xl font-semibold leading-tight tracking-[-0.025em] text-card-foreground transition-colors duration-200 group-hover/card:text-primary sm:text-2xl"
           >
             {project.title}
-          </h3>
+          </Heading>
         </CardHeader>
 
         <CardContent className="relative z-10 flex min-w-0 flex-1 flex-col px-6 pb-6 sm:px-7 sm:pb-7">

@@ -19,6 +19,23 @@ export function getAbsoluteUrl(path: string): string | undefined {
   return new URL(path, `${siteConfig.url}/`).toString();
 }
 
+export function getAbsoluteImageMetadata(images: readonly ImageAsset[]) {
+  return images.flatMap((image) => {
+    const url = getAbsoluteUrl(image.src);
+
+    return url
+      ? [
+          {
+            url,
+            alt: image.alt,
+            width: image.width,
+            height: image.height,
+          },
+        ]
+      : [];
+  });
+}
+
 export function getProjectSeoDescription(project: Project): string {
   const suppliedDescription =
     project.summary.trim() || project.description.trim();
@@ -50,20 +67,7 @@ export function createPageMetadata({
   images = [],
 }: PageMetadataOptions): Metadata {
   const canonical = getAbsoluteUrl(path);
-  const socialImages = images.flatMap((image) => {
-    const url = getAbsoluteUrl(image.src);
-
-    return url
-      ? [
-          {
-            url,
-            alt: image.alt,
-            width: image.width,
-            height: image.height,
-          },
-        ]
-      : [];
-  });
+  const socialImages = getAbsoluteImageMetadata(images);
 
   return {
     title,

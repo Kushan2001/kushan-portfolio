@@ -12,12 +12,15 @@ import { getAbsoluteUrl } from "@/lib/seo";
 
 export default function Home() {
   const canonical = getAbsoluteUrl("/");
+  const profileImage = profile.image
+    ? getAbsoluteUrl(profile.image.src)
+    : undefined;
   const personJsonLd = {
     "@context": "https://schema.org",
     "@type": "Person",
     name: profile.name,
     description: profile.introduction,
-    jobTitle: profile.roles,
+    jobTitle: profile.headline,
     ...(profile.location
       ? {
           address: {
@@ -30,6 +33,7 @@ export default function Home() {
     ...(profile.socialLinks.length > 0
       ? { sameAs: profile.socialLinks.map((socialLink) => socialLink.url) }
       : {}),
+    ...(profileImage ? { image: profileImage } : {}),
     ...(canonical ? { url: canonical } : {}),
   };
 
