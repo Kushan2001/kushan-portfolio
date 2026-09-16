@@ -5,6 +5,7 @@ import { ProjectCaseStudy } from "@/components/projects/project-case-study";
 import { JsonLd } from "@/components/seo/json-ld";
 import { profile } from "@/data/profile";
 import { projects } from "@/data/projects";
+import { getProjectBySlug } from "@/lib/projects";
 import {
   createPageMetadata,
   getAbsoluteUrl,
@@ -17,10 +18,6 @@ interface ProjectPageProps {
   }>;
 }
 
-function getProject(slug: string) {
-  return projects.find((project) => project.slug === slug);
-}
-
 export const dynamicParams = false;
 
 export function generateStaticParams() {
@@ -31,7 +28,7 @@ export async function generateMetadata({
   params,
 }: ProjectPageProps): Promise<Metadata> {
   const { slug } = await params;
-  const project = getProject(slug);
+  const project = getProjectBySlug(projects, slug);
 
   if (!project) {
     notFound();
@@ -48,7 +45,7 @@ export async function generateMetadata({
 
 export default async function ProjectPage({ params }: ProjectPageProps) {
   const { slug } = await params;
-  const project = getProject(slug);
+  const project = getProjectBySlug(projects, slug);
 
   if (!project) {
     notFound();

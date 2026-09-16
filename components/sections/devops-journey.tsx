@@ -2,25 +2,12 @@ import { Container } from "@/components/layout/container";
 import { Section } from "@/components/layout/section";
 import {
   DevOpsRoadmap,
-  type DevOpsRoadmapStage,
 } from "@/components/sections/devops-roadmap";
 import { devOpsMilestones } from "@/data/devops-milestones";
-import type { MilestoneStatus } from "@/types";
-
-const statusOrder = [
-  "completed",
-  "in-progress",
-  "planned",
-] as const satisfies readonly MilestoneStatus[];
+import { groupDevOpsMilestonesByStatus } from "@/lib/devops";
 
 export function DevOpsJourney() {
-  const stages = statusOrder.flatMap<DevOpsRoadmapStage>((status) => {
-    const milestones = devOpsMilestones.filter(
-      (milestone) => milestone.status === status,
-    );
-
-    return milestones.length > 0 ? [{ status, milestones }] : [];
-  });
+  const stages = groupDevOpsMilestonesByStatus(devOpsMilestones);
 
   if (stages.length === 0) {
     return null;
