@@ -3,6 +3,7 @@ import { describe, expect, it } from "vitest";
 import {
   filterProjectsByCategory,
   getAvailableProjectCategories,
+  getProjectBySlug,
   getSelectedProjectCategory,
 } from "@/lib/projects";
 import type { Project, ProjectCategory } from "@/types";
@@ -77,4 +78,17 @@ describe("project filtering", () => {
   it("returns the original collection for the all filter", () => {
     expect(filterProjectsByCategory(projects, "all")).toBe(projects);
   });
+});
+
+describe("project slug lookup", () => {
+  it("returns the matching project without copying it", () => {
+    expect(getProjectBySlug(projects, "software-project")).toBe(projects[1]);
+  });
+
+  it.each(["missing-project", "Software-Project", ""])(
+    "returns undefined when no project has the exact slug (%s)",
+    (slug) => {
+      expect(getProjectBySlug(projects, slug)).toBeUndefined();
+    },
+  );
 });

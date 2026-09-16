@@ -18,16 +18,12 @@ import { motion, useReducedMotion, type Variants } from "motion/react";
 import type { ComponentType, SVGProps } from "react";
 
 import { GitHubIcon } from "@/components/ui/github-icon";
+import type { DevOpsMilestoneGroup } from "@/lib/devops";
 import { cn } from "@/lib/utils";
 import type { DevOpsMilestone, MilestoneStatus } from "@/types";
 
-export interface DevOpsRoadmapStage {
-  status: MilestoneStatus;
-  milestones: readonly DevOpsMilestone[];
-}
-
 interface DevOpsRoadmapProps {
-  stages: readonly DevOpsRoadmapStage[];
+  stages: readonly DevOpsMilestoneGroup[];
 }
 
 type TechnologyIcon = ComponentType<SVGProps<SVGSVGElement>>;

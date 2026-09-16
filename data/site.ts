@@ -1,4 +1,4 @@
-function resolveSiteUrl(value: string | undefined): string | null {
+export function resolveSiteUrl(value: string | undefined): string | null {
   const candidate = value?.trim();
 
   if (!candidate) {

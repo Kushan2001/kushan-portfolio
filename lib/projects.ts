@@ -22,6 +22,13 @@ export const filterableProjectCategories = [
   "cloud",
 ] as const satisfies readonly ProjectCategory[];
 
+export function getProjectBySlug(
+  projects: readonly Project[],
+  slug: string,
+): Project | undefined {
+  return projects.find((project) => project.slug === slug);
+}
+
 export function getAvailableProjectCategories(
   projects: readonly Project[],
 ): ProjectCategory[] {
